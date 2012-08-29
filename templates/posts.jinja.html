@@ -1,0 +1,6 @@
+{% extends "base.jinja.html" %}
+{% block contents %}
+    {% for post in posts %}
+        {% include "item.jinja.html" %}
+    {% endfor %}
+{% endblock %}

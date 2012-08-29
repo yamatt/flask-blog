@@ -1,0 +1,9 @@
+{% extends "base.jinja.html" %}
+{% block contents %}
+<form method="POST" action="{{ post_location }}">
+{% for field in form -%}
+    <label>{{ field.label.text }}{{ field }}</label>
+{%- endfor %}
+    <button type="submit">{{ form.submit_name }}</button>
+</form>
+{% endblock %}
