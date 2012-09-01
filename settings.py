@@ -9,10 +9,8 @@ PER_PAGE=15
 PERMINENT_LOGON_TIMEOUT = {'year': 1}
 
 #Database
+DATABASE_TYPE="couchdb"
 CONNECTION=""
-TABLE=""
-USERNAME=""
-PASSWORD=""
 
 #User
 HASH = """CHANGE ME!!!"""

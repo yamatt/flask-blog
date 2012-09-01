@@ -3,6 +3,7 @@ from datetime import datetime
 from enums import AuthorisationLevels
 import settings
 from base import DataBase, Post, User, DataBaseError
+from urlparse import urlparse
 try:
     from json import dumps as jsonsdump
 except ImportError:
@@ -11,59 +12,57 @@ except ImportError:
 class DataBase(object):
     DESIGN_NAME = "_design/blog"
     DESIGN_CONTENTS = {
-                        "views": {
-                            "post": {
-                                "map": """function(doc) {
-                                            if (doc.type=="post") {
-                                                emit((doc.published[0], doc.published[1], doc.title), doc)
-                                            }
-                                        }
-                                    """
-                            },
-                            "posts": {
-                                "map": """function(doc) {
-                                            if (doc.type=="post") {
-                                                emit((doc.created), doc)
-                                            }
-                                        }
-                                    """
-                            },
-                            "posts-published": {
-                                "map": """function(doc) {
-                                            if ((doc.type=="post") &&(doc.published != null) ) {
-                                                emit((doc.published), doc)
-                                            }
-                                        }
-                                    """
-                            },
-                            "user": {
-                                "map": """function(doc) {
-                                            if (doc.type=="user") {
-                                                emit(doc.username, doc)
-                                            }
-                                        }
-                                    """
-                                }
+        "views": {
+            "post": {
+                "map": """function(doc) {
+                            if (doc.type=="post") {
+                                emit((doc.published[0], doc.published[1], doc.title), doc)
                             }
                         }
-                    }
-    @classmethod
-    def setup(cls):
-        server = Server(settings.CONNECTION)
-        server.resource.credentials = (settings.USERNAME, settings.PASSWORD)
-        db = s.create(settings.TABLE)
-        del db[self.DESIGN_NAME]
-        db[self.DESIGN_NAME] = self.DESIGN_CONTENTS
-        return cls(settings.CONNECTION, settings.TABLE, settings.USERNAME, settings.PASSWORD)
+                    """
+            },
+            "posts": {
+                "map": """function(doc) {
+                            if (doc.type=="post") {
+                                emit((doc.created), doc)
+                            }
+                        }
+                    """
+            },
+            "posts-published": {
+                "map": """function(doc) {
+                            if ((doc.type=="post") &&(doc.published != null) ) {
+                                emit((doc.published), doc)
+                            }
+                        }
+                    """
+            },
+            "user": {
+                "map": """function(doc) {
+                            if (doc.type=="user") {
+                                emit(doc.username, doc)
+                            }
+                        }
+                    """
+                }
+            }
+        }
+    }
 
-    def __init__(self):
+    def __init__(self, connection_string):
         """
         Detect state of database and create if nessecery.
         """
-        self.connection = settings.CONNECTION
-        self.server = Server(self.connection)
-        self.server.resource.credentials = (settings.USERNAME, settings.PASSWORD)
-        self.db = self.server[table_name]
+        url = urlparse(connection_string)
+        server_url = "http://%s:%s" % (url.hostname, url.port)
+        self.server = Server(server_url)
+        if url.username and url.password:
+            self.server.resource.credentials = (url.username, url.password)
+        table_name = url.path[1:]
+        self.db = self.server.get(table_name)
+        if not self.db:
+            self.db = self.server.create(table_name)
+            self.db[self.DESIGN_NAME] = self.DESIGN_CONTENTS
         
     def _return_view(self, view_name, key=None, key_start=None, key_end=None, descending=False):
         path = self.DESIGN_NAME + "/_view/" + view_name
@@ -158,7 +157,7 @@ class User(User):
     @classmethod
     from from_row(cls, row):
         user = row['value']
-        return cls(user.username, user.hashed_password, user.authorisation_level)
+        return cls(user.username, fullname, email, user.hashed_password, user.authorisation_level)
 
     def __dict__(self):
         return self.__dict__

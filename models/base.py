@@ -8,11 +8,8 @@ class DataBaseError(Exception):
     pass
 
 class DataBase(object):
-    @classmethod
-    def setup(cls):
-        return cls(settings.CONNECTION, settings.TABLE, settings.USERNAME, settings.PASSWORD)
 
-    def __init__(self):
+    def __init__(self, connection_string):
         """
         Set up all your database server connection here.
         """
@@ -59,7 +56,7 @@ class Item(object):
         """
         self.content = content
         self.user = user
-        self.created = created if created else datetime.now()
+        self.created = created if created else datetime.utcnow()
         
 class Comment(Item):
     """
@@ -92,8 +89,10 @@ class User(object):
     def hash_password(password):
         hashed = bcrypt.hashpw(password, bcrypt.gensalt())
 
-    def __init__(self, username, hashed_password, authorisation_level=AuthorisationLevels.COMMENTOR):
+    def __init__(self, username, fullname, email, hashed_password, authorisation_level=AuthorisationLevels.COMMENTOR):
         self.username = username
+        self.fullname = fullname
+        self.email = email
         self.hashed_password = hashed_password
         self.authorisation_level = authorisation_level
         

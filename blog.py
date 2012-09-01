@@ -2,6 +2,8 @@ from flask import Flask, request, url_for,g , session, flash, redirect, render_t
 from models.couchdb import DataBase
 import settings
 from enums import AuthorisationLevels
+from forms import Login
+
 app = Flask(__name__)
 app.config.from_object(settings)
 
@@ -26,7 +28,9 @@ def setup_database_connection():
     """
     Creates database objects
     """
-    g.db = DataBase(app.config['CONNECTION'], app.config['TABLE'], app.config['USERNAME'], app.config['PASSWORD'], per_page=app.config['PER_PAGE'])
+    module = ".".join("models", settings.DATABASE_TYPE)
+    db_type = __import__(module, globals(), locals(), [])
+    g.db = db_type.DataBase(app.config['CONNECTION'])
 
 @app.route('/')
 @app.route('/posts/')
@@ -57,7 +61,6 @@ def change():
     """
     Edit or add a new post
     """
-    
 
 
 @app.route('/login', method=["GET", "POST"])
