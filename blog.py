@@ -1,8 +1,15 @@
 from flask import Flask, request, url_for,g , session, flash, redirect, render_template
-from models.couchdb import DataBase
 import settings
 from enums import AuthorisationLevels
-from forms import Login
+from models.forms import Login
+from datetime import timedelta
+
+def create_database():
+    global database
+    database_name = ".".join(["models", settings.DATABASE_TYPE])
+    database_module = __import__(database_name, globals(), locals(), [])
+    database = getattr(database_module, settings.DATABASE_TYPE)
+create_database()
 
 app = Flask(__name__)
 app.config.from_object(settings)
@@ -12,7 +19,7 @@ def is_admin(fn, user_level=AuthorisationLevels.ADMIN):
         username = session.get('username')
         if username:
             user = g.db.get_user(username)
-            if user['level'] => user_level:
+            if user['level'] >= user_level:
                 return fn()
             else:
                 flash("You are not authenticated for this action.")
@@ -26,9 +33,7 @@ def setup_database_connection():
     """
     Creates database objects
     """
-    module = ".".join("models", settings.DATABASE_TYPE)
-    db_type = __import__(module, globals(), locals(), [])
-    g.db = db_type.DataBase(app.config['CONNECTION'])
+    g.db = database.DataBase(app.config['CONNECTION'])
 
 @app.route('/')
 @app.route('/posts/')
@@ -53,15 +58,15 @@ def post(year=None, month=None, post_name=None):
     render_template('post.mark.html', post=post)
 
 @is_admin
-@app.route('/posts/new', method=["GET", "POST"])
-@app.route('/posts/<int:year>/<int:month>/<post_name>/edit', method=["GET", "POST"])
+@app.route('/posts/new', methods=["GET", "POST"])
+@app.route('/posts/<int:year>/<int:month>/<post_name>/edit', methods=["GET", "POST"])
 def change():
     """
     Edit or add a new post
     """
 
 
-@app.route('/login', method=["GET", "POST"])
+@app.route('/login', methods=["GET", "POST"])
 def login():
     if not session.get("username"):
         form = Login()
@@ -84,10 +89,10 @@ def logout():
     flash("""You have been logged out. <a href="">Login?</a>""" % for_url("login"))
     return redirect(for_url("posts"))
 
-@app.route('/config', method=["GET", "POST"])
+@app.route('/config', methods=["GET", "POST"])
 def config():
     pass
 
 if __name__ == '__main__':
-    app.run()
     app.permanent_session_lifetime = timedelta(**app.config['PERMANENT_LOGON_TIMEOUT'])
+    app.run()
