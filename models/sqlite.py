@@ -4,7 +4,7 @@ from datetime import datetime
 
 class DataBase(DataBase):
     SETUP_COMMANDS = [
-        """CREATE TABLE IF NOT EXISTS posts (title TEXT, content TEXT, created INTEGER, published INTEGER, user INTEGER)""",
+        """CREATE TABLE IF NOT EXISTS posts (name TEXT, title TEXT, content TEXT, created INTEGER, published INTEGER, user INTEGER)""",
         """CREATE TABLE IF NOT EXISTS users (username TEXT, fullname TEXT, email TEXT, hashed_password BLOB, authorisation_level INTEGER, PRIMARY KEY(username))"""
     ]
 
@@ -16,7 +16,7 @@ class DataBase(DataBase):
         self.conn.commit()
 
     def get_post(self, year, month, post_name):
-        REQUEST = """SELECT title, content, created, published, user FROM posts WHERE (created > ? AND created < ? AND title = ?)"""
+        REQUEST = """SELECT title, content, created, published, user FROM posts WHERE (created > ? AND created < ? AND name = ?)"""
         
         dt_start = datetime(year, month, 1)
         epoc_start = int(dt_start.strftime("%s"))
@@ -91,7 +91,7 @@ class DataBase(DataBase):
         self.conn.commit()
         
     def add_post(self, post):
-        REQUEST = """INSERT INTO posts VALUES (?, ?, ?, ?, ?, ?)"""
+        REQUEST = """INSERT INTO posts VALUES (?, ?, ?, ?, ?, ?, ?)"""
         self.cursor.execute(REQUEST, post.to_row())
         self._save()
 
@@ -108,7 +108,7 @@ class DataBase(DataBase):
 
 class Post(Post):
     def to_row(self):
-        return (self.title, self.content, self.created, self.published, self.user.username)
+        return (self.name, self.title, self.content, self.created, self.published, self.user.username)
         
 class User(User):
     def to_row(self):

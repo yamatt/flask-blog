@@ -61,7 +61,6 @@ class Comment(Item):
     """
     A comment object that holds comments for an item.
     """
-    type = "comment"
     def __init__(self, content, user, post, created=None):
         """
         @param post: a post object that this comment is the child of.
@@ -69,14 +68,21 @@ class Comment(Item):
         self.post = post
         super(Comment, self).__init__(content, user, created)
     
-class Post(Item):
+        
+class Page(Item):
+    def __init__(self, name, title, content, user, created=None, published=False):
+        self.name = name
+        self.published = datetime.now() if published else None
+        super(Post, self).__init__(content, user, created)
+    
+class Post(Page):
     """
     A post object that represents a new post.
     """
     def __init__(self, title, content, user, created=None, published=False):
         self.title = title
-        self.published = datetime.now() if published else None
-        super(Post, self).__init__(content, user, created)
+        name = title.replace(" ", "-")
+        super(Post, self).__init__(name, title, content, user, created)
         
         
 class User(object):

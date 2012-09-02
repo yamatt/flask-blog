@@ -1,7 +1,7 @@
 from flask import Flask, request, url_for, g , session, flash, redirect, render_template
 import settings
 from enums import AuthorisationLevels
-from models.forms import Login
+from models.forms import Login, Post
 from datetime import timedelta
 
 def create_database():
@@ -46,7 +46,7 @@ def posts(year=None, month=None, post_name=None):
     page = request.args.get('page')
     if page:
         page = int(page) * int(app.config['PER_PAGE'])
-    if year:
+    if year or (year and month):
         posts = g.db.get_published_posts(year=year, month=month, page=page)
     else:
         posts = g.db.get_published_posts(page=page)
@@ -60,11 +60,13 @@ def post(year=None, month=None, post_name=None):
 @is_admin
 @app.route('/posts/new', methods=["GET", "POST"])
 @app.route('/posts/<int:year>/<int:month>/<post_name>/edit', methods=["GET", "POST"])
-def change():
+def change_post():
     """
     Edit or add a new post
     """
-
+    form = Post()
+    if form.validate_on_submit():
+        pass
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -97,6 +99,7 @@ def logout():
 @app.route('/config', methods=["GET", "POST"])
 def config():
     pass
+    
 
 if __name__ == '__main__':
     app.permanent_session_lifetime = timedelta(**app.config['PERMANENT_LOGON_TIMEOUT'])
