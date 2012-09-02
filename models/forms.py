@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, TextAreaField BooleanField, validators
+from flask.ext.wtf import Form, TextField, TextAreaField, PasswordField, BooleanField, validators
 
 class User(Form):
     username = TextField("Username", [validators.Length(min=4, max=25)])

@@ -47,7 +47,6 @@ class DataBase(object):
                 }
             }
         }
-    }
 
     def __init__(self, connection_string):
         """
@@ -140,6 +139,7 @@ class DataBase(object):
         db.save(dict(user))
         
 class Post(Post):
+    type = "post"
     @classmethod
     def from_row(cls, row):
         post = row['value']
@@ -154,8 +154,9 @@ class Post(Post):
         return self.__dict__
         
 class User(User):
+    type = "user"
     @classmethod
-    from from_row(cls, row):
+    def from_row(cls, row):
         user = row['value']
         return cls(user.username, fullname, email, user.hashed_password, user.authorisation_level)
 

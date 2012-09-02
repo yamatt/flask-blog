@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for,g , session, flash, redirect, render_template
+from flask import Flask, request, url_for, g , session, flash, redirect, render_template
 import settings
 from enums import AuthorisationLevels
 from models.forms import Login
@@ -28,7 +28,7 @@ def is_admin(fn, user_level=AuthorisationLevels.ADMIN):
             flash("You are not logged in.")
             return url_for('login')
 
-@app.before_first_request
+@app.before_request
 def setup_database_connection():
     """
     Creates database objects
@@ -47,9 +47,9 @@ def posts(year=None, month=None, post_name=None):
     if page:
         page = int(page) * int(app.config['PER_PAGE'])
     if year:
-        posts = g.db.get_posts_by_date(year=year, month=month, page=page)
+        posts = g.db.get_published_posts(year=year, month=month, page=page)
     else:
-        posts = g.db.get_latest_posts(page=page)
+        posts = g.db.get_published_posts(page=page)
     return render_template('posts.jinja.html', posts=posts)
 
 @app.route('/posts/<int:year>/<int:month>/<post_name>')
@@ -72,22 +72,27 @@ def login():
         form = Login()
         if form.validate_on_submit():
             user = g.db.get_user(form.username.data)
-            if user.password_matches(form.password.data):
+            if user and user.password_matches(form.password.data):
                 session['username'] = user.username
                 flash("Logged in successfully")
-                return redirect(for_url("posts"))
+                return redirect(url_for("posts"))
             else:
                 flash("That username and password combination could not be found.")
+        else:
+            flash("The form is not valid.")
         return render_template('login.jinja.html', form=form)
     else:
-        flash("""You are already logged in. <a href="%s">Logout?</a>""" % for_url("logout"))
-        return redirect(for_url("posts"))
+        flash("""You are already logged in.""")
+        return redirect(url_for("posts"))
         
 @app.route('/logout')
 def logout():
-    session.pop("username")
-    flash("""You have been logged out. <a href="">Login?</a>""" % for_url("login"))
-    return redirect(for_url("posts"))
+    if session.get("username"):
+        session.pop("username")
+        flash("""You have been logged out.""")
+    else:
+        flash("You are not logged in.")
+    return redirect(url_for("posts"))
 
 @app.route('/config', methods=["GET", "POST"])
 def config():

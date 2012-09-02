@@ -1,4 +1,3 @@
-from couchdb import Server
 from datetime import datetime
 from enums import AuthorisationLevels
 import settings
@@ -28,7 +27,7 @@ class DataBase(object):
         """
         raise NotImplementedError()
         
-    def get_latest_posts(self, page=None):
+    def get_published_posts(self, page=None):
         """
         Return array of items for front page
         """
@@ -74,8 +73,6 @@ class Post(Item):
     """
     A post object that represents a new post.
     """
-    type = "post"
-    
     def __init__(self, title, content, user, created=None, published=False):
         self.title = title
         self.published = datetime.now() if published else None
@@ -83,11 +80,9 @@ class Post(Item):
         
         
 class User(object):
-    type = "user"
-    
     @staticmethod
     def hash_password(password):
-        hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+        return bcrypt.hashpw(password, bcrypt.gensalt())
 
     def __init__(self, username, fullname, email, hashed_password, authorisation_level=AuthorisationLevels.COMMENTOR):
         self.username = username
