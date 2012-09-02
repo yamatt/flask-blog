@@ -4,7 +4,7 @@ from datetime import datetime
 
 class DataBase(DataBase):
     SETUP_COMMANDS = [
-        """CREATE TABLE IF NOT EXISTS posts (id INTEGER, title TEXT, content TEXT, created INTEGER, published INTEGER, user INTEGER, PRIMARY KEY(id, ASC))"""
+        """CREATE TABLE IF NOT EXISTS posts (title TEXT, content TEXT, created INTEGER, published INTEGER, user INTEGER)"""
         """CREATE TABLE IF NOT EXISTS users (username TEXT, fullname TEXT, email TEXT, hashed_password BLOB, authorisation_level INTEGER, PRIMARY KEY(username, ASC))"""
     ]
 

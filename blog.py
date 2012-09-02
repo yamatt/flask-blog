@@ -20,8 +20,6 @@ def is_admin(fn, user_level=AuthorisationLevels.ADMIN):
         else:
             flash("You are not logged in.")
             return url_for('login')
-        
-
 
 @app.before_first_request
 def setup_database_connection():
@@ -66,22 +64,25 @@ def change():
 @app.route('/login', method=["GET", "POST"])
 def login():
     if not session.get("username"):
-        if request.method == "POST":
-            username = request.form['username'] # wtforms pls
-            password = request.form['password']
-            remember = request.form['remember']
-            if g.db.is_user(username, password):
-                session['username'] = username
-                if remember == "yes":
-                    session.permanent = True
-                flash("You are now logged in.")
-                return redirect(for_url("posts")
+        form = Login()
+        if form.validate_on_submit():
+            user = g.db.get_user(form.username.data)
+            if user.password_matches(form.password.data):
+                session['username'] = user.username
+                flash("Logged in successfully")
+                return redirect(for_url("posts"))
             else:
-                flash("Could not log you in with that username and password combination. Please try again.")
-        return render_template('login.jinja.html')
+                flash("That username and password combination could not be found.")
+        return render_template('login.jinja.html', form=form)
     else:
-        flash("You are already logged in.")
+        flash("""You are already logged in. <a href="%s">Logout?</a>""" % for_url("logout"))
         return redirect(for_url("posts"))
+        
+@app.route('/logout')
+def logout():
+    session.pop("username")
+    flash("""You have been logged out. <a href="">Login?</a>""" % for_url("login"))
+    return redirect(for_url("posts"))
 
 @app.route('/config', method=["GET", "POST"])
 def config():
@@ -89,4 +90,4 @@ def config():
 
 if __name__ == '__main__':
     app.run()
-    app.permanent_session_lifetime = timedelta(**app.config['PERMINENT_LOGON_TIMEOUT'])
+    app.permanent_session_lifetime = timedelta(**app.config['PERMANENT_LOGON_TIMEOUT'])
