@@ -2,7 +2,11 @@
 {% block contents %}
 <form method="POST" action="{{ post_location }}">
 {% for field in form -%}
+    {% if field.type == "HiddenField" or field.name == "csrf_token" %}
+    {{ field }}
+    {% else %}
     <label>{{ field.label.text }}{{ field }}</label>
+    {% endif %}
 {%- endfor %}
     <button type="submit">{{ form.submit_name }}</button>
 </form>

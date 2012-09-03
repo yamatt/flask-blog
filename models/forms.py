@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, TextAreaField, PasswordField, BooleanField, validators
+from flask.ext.wtf import Form, TextField, TextAreaField, HiddenField, PasswordField, BooleanField, validators
 
 class User(Form):
     username = TextField("Username", [validators.Length(min=4, max=25)])
@@ -16,15 +16,14 @@ class Register(User):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
-
-class Item(Form):
-    content = TextAreaField("Content", [validators.Required()])
-
-class Post(Item):
+    
+class Post(Form):
     submit_name = "Save"
-    title = TextField("Content", [validators.Required()])
+    id_val = HiddenField("id_val")
+    title = TextField("Title", [validators.Required()])
+    content = TextAreaField("Content", [validators.Required()])
     published = BooleanField("Publish?", default=False)
     
-class Comment(Item):
+class Comment(Form):
     submit_name = "Submit"
-    pass
+    content = TextAreaField("Content", [validators.Required()])

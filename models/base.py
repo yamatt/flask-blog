@@ -21,6 +21,12 @@ class DataBase(object):
         """
         raise NotImplementedError()
         
+    def get_post_by_id(self, id_val):
+        """
+        Return a post from the id.
+        """
+        raise NotImplementedError()
+        
     def get_posts(self, year=None, month=None, page=None):
         """
         Return a list of Post objects that match the parameters.
@@ -42,12 +48,15 @@ class DataBase(object):
     def add_user(self, user):
         raise NotImplementedError()
         
+    def update_user(self, user):
+        raise NotImplementedError()
+        
         
 class Item(object):
     """
     A base blog post. Could turn in to a comment, blog entry or podcast episode just by extending it.
     """
-    def __init__(self, content, user, created=None):
+    def __init__(self, content, user, updated=None):
         """
         @param content: the content of your entry.
         @param user: the user object this item was created by.
@@ -55,34 +64,47 @@ class Item(object):
         """
         self.content = content
         self.user = user
-        self.created = created if created else datetime.utcnow()
+        self.updated = updated
+        if not updated:
+            self.updated = datetime.utcnow()
         
 class Comment(Item):
     """
     A comment object that holds comments for an item.
     """
-    def __init__(self, content, user, post, created=None):
+    def __init__(self, content, user, post, updated=None):
         """
         @param post: a post object that this comment is the child of.
         """
         self.post = post
         super(Comment, self).__init__(content, user, created)
-    
         
-class Page(Item):
-    def __init__(self, name, title, content, user, created=None, published=False):
+class Page(Item):        
+    def __init__(self, name, title, content, user, published=False):
         self.name = name
-        self.published = datetime.now() if published else None
-        super(Post, self).__init__(content, user, created)
+        self.published = None
+        if published:
+            self.published = datetime.utcnow()
+        super(Page, self).__init__(content, user)
     
 class Post(Page):
     """
     A post object that represents a new post.
     """
-    def __init__(self, title, content, user, created=None, published=False):
+    @classmethod
+    def from_form(cls, form, user):
+        id_val = form.id_val.data
+        title = form.title.data
+        content = form.content.data
+        user = user
+        published = form.published.data
+        return cls(id_val, title, content, user, published)
+        
+    def __init__(self, id_val, title, content, user, updated=None, published=False):
+        self.id_val = id_val
         self.title = title
         name = title.replace(" ", "-")
-        super(Post, self).__init__(name, title, content, user, created)
+        super(Post, self).__init__(name, title, content, user, published)
         
         
 class User(object):

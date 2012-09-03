@@ -32,8 +32,8 @@ class TestSQLiteDB(unittest.TestCase):
         values = self._add_user()
         
         user = self.blog_db.get_user(values[0])
-        
         self.assertEqual(user.to_row(), values)
+        
 
 if __name__ == "__main__":
     unittest.main()
