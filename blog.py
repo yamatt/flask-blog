@@ -3,6 +3,7 @@ import settings
 from enums import AuthorisationLevels
 from models.forms import Login, Post
 from datetime import timedelta
+from functools import wraps
 
 def create_database():
     global database
@@ -30,18 +31,20 @@ def get_user():
         user = g.db.get_user(username)
         return user
 
-def is_admin(fn, user_level=AuthorisationLevels.ADMIN):
-    def wrap():
+def is_admin(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
         user = get_user()
-        if username:
-            if user['level'] >= user_level:
-                return fn()
+        if user:
+            if user.authorisation_level >= AuthorisationLevels.ADMIN:
+                return f(*args, **kwargs)
             else:
-                flash("You are not authenticated for this action.")
-                return url_for('posts')
+                flash("Your account does not allow access to this.")
+                return redirect(url_for('posts'))
         else:
             flash("You are not logged in.")
-            return url_for('login')
+            return redirect(url_for('login'))
+    return decorated_function
 
 @app.before_request
 def setup_database_connection():
@@ -72,23 +75,23 @@ def post(year=None, month=None, post_name=None):
     post = g.db.get_post(year=year, month=month, post_name=post_name)
     render_template('post.jinja.html', post=post)
     
-@is_admin
-@app.route("/posts/preview")
-def preview(methods=['POST']):
-    """
-    Given a form generate what the post would look like.
-    """
-    pass
+#@app.route("/posts/preview")
+#@is_admin
+#def preview(methods=['POST']):
+    #"""
+    #Given a form generate what the post would look like.
+    #"""
+    #pass
 
-@is_admin
 @app.route('/posts/list', methods=["GET"])
+@is_admin
 def post_list():
     posts = g.db.get_all_posts()
     return render_template("list.jinja.html", posts=posts)
 
-@is_admin
 @app.route('/posts/new', methods=["GET", "POST"])
 @app.route('/posts/<id_val>/edit', methods=["GET", "POST"])
+@is_admin
 def change(id_val=None):
     """
     Edit or add a new post
