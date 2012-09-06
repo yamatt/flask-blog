@@ -20,6 +20,10 @@ def set_parser():
 app = Flask(__name__)
 app.config.from_object(settings)
 
+@app.template_filter('datetime')
+def format_datetime_filter(dt, format="%Y-%m-%d %H:%M UTC"):
+    return dt.strftime(format)
+
 def get_user():
     username = session.get('username')
     if username:

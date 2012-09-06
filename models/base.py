@@ -60,13 +60,11 @@ class Item(object):
         """
         @param content: the content of your entry.
         @param user: the user object this item was created by.
-        @param created: a datetime object of when this entry was created.
+        @param updated: a datetime object of when this entry was last updated.
         """
         self.content = content
         self.user = user
         self.updated = updated
-        if not updated:
-            self.updated = datetime.utcnow()
         
 class Comment(Item):
     """
@@ -80,12 +78,12 @@ class Comment(Item):
         super(Comment, self).__init__(content, user, created)
         
 class Page(Item):        
-    def __init__(self, name, title, content, user, published=False):
+    def __init__(self, name, title, content, user, updated, published=False):
         self.name = name
         self.published = None
         if published:
             self.published = datetime.utcnow()
-        super(Page, self).__init__(content, user)
+        super(Page, self).__init__(content, user, updated)
     
 class Post(Page):
     """
@@ -98,13 +96,14 @@ class Post(Page):
         content = form.content.data
         user = user
         published = form.published.data
-        return cls(id_val, title, content, user, published)
+        updated = datetime.utcnow()
+        return cls(id_val, title, content, user, updated, published)
         
     def __init__(self, id_val, title, content, user, updated=None, published=False):
         self.id_val = id_val
         self.title = title
         name = title.replace(" ", "-")
-        super(Post, self).__init__(name, title, content, user, published)
+        super(Post, self).__init__(name, title, content, user, updated, published)
         
         
 class User(object):

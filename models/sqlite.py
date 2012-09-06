@@ -18,10 +18,10 @@ class DataBase(DataBase):
     def get_post_by_id(self, id_val):
         REQUEST = """SELECT rowid, title, content, user, updated, published FROM posts WHERE (rowid=?)"""
         result = self.cursor.execute(REQUEST, id_val).fetchone()
-        return Post(*result)
+        return Post.from_result(self, result)
         
     def get_all_posts(self):
-        REQUEST = """SELECT rowid, title, content, updated, published, user FROM posts"""
+        REQUEST = """SELECT rowid, title, content, user, updated, published FROM posts"""
         results = []
         for row in self.cursor.execute(REQUEST):
             post = Post(*row)
@@ -29,7 +29,7 @@ class DataBase(DataBase):
         return results
 
     def get_published_post(self, year, month, post_name):
-        REQUEST = """SELECT rowid, title, content, updated, published, user FROM posts WHERE (published > ? AND published < ? AND name = ?)"""
+        REQUEST = """SELECT rowid, title, content, user, updated, published FROM posts WHERE (published > ? AND published < ? AND name = ?)"""
         
         dt_start = datetime(year, month, 1)
         epoc_start = int(dt_start.strftime("%s"))
@@ -42,11 +42,11 @@ class DataBase(DataBase):
         
         result = self.cursor.execute(REQUEST, [epoc_start, epoc_end, post_name]).fetchone()
         
-        return Post(*result)
+        return Post.from_result(self, result)
     
     def get_published_posts(self, year=None, month=None, page=None):
-        REQUEST_DATE = """SELECT title, content, user, created, published FROM posts WHERE (published > ? AND published)"""
-        REQUEST = """SELECT title, content, updated, published, user FROM posts WHERE (published IS NOT NULL)"""
+        REQUEST_DATE = """SELECT rowid, title, content, user, updated, published FROM posts WHERE (published > ? AND published)"""
+        REQUEST = """SELECT rowid, title, content, user, updated, published FROM posts WHERE (published IS NOT NULL)"""
         
         def datetime_to_epoc(dt):
             return int(dt.strftime("%s"))
@@ -71,21 +71,18 @@ class DataBase(DataBase):
                 epoc_end = int(dt_end.strftime("%s"))
                 
             for row in self.cursor.execute(REQUEST_DATE, [epoc_start, epoc_end]):
-                post = Posts(*row)
+                post = Post.from_result(self, row)
                 results.append(post)
         else:
             # get all
             for row in self.cursor.execute(REQUEST):
-                post = Post(None, row[0], row[1], self.get_user(row[2]), row[3], row[4])
+                post = Post.from_result(self, row)
                 results.append(post)
             
         return results
         
-    def _save(self):
-        self.conn.commit()
-        
     def add_post(self, post):
-        data = (post.name, post.title, post.content, datetime.utcnow(), post.published, post.user.username)
+        data = post.to_row()
         if post.id_val:
             #update
             REQUEST = """UPDATE posts SET name=?, title=?, content=?, updated=?, published=?, user=? WHERE (rowid = ?);"""
@@ -107,5 +104,32 @@ class DataBase(DataBase):
         REQUEST = """INSERT INTO users VALUES (?, ?, ?, ?, ?)"""
         self.cursor.execute(REQUEST, user.to_row())
         self._save()
+        
+    def _save(self):
+        self.conn.commit()
 
+class Post(Post):
+    @classmethod
+    def from_result(cls, database, result):
+        id_val = result[0]
+        title = result[1]
+        content = result[2]
+        user = database.get_user(result[3])
+        print result[3]
+        updated = datetime.fromtimestamp(result[4])
+        published = result[5]
+        if result[5]:
+            published = datetime.fromtimestamp(result[5])
+        return cls(id_val, title, content, user, updated, published)
+        
+    def to_row(self):
+        updated = int(datetime.utcnow().strftime("%s"))
+        if self.published:
+            published = int(self.published.strftime("%s"))
+        else:
+            published = self.published
+        return (self.name, self.title, self.content, updated, published, self.user.username)
 
+class User(User):
+    def to_row(self):
+        return (self.username, self.fullname, self.email, self.hashed_password, self.authorisation_level)
