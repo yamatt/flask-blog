@@ -11,6 +11,12 @@ def create_database():
     database = getattr(database_module, settings.DATABASE_TYPE)
 create_database()
 
+def set_parser():
+    global parser
+    parser_name = ".".join(["parsers", settings.PARSER])
+    parser = __import__(parser_name, globals(), locals(), [])
+#set_parser()
+
 app = Flask(__name__)
 app.config.from_object(settings)
 
@@ -83,7 +89,7 @@ def change(id_val=None):
     """
     Edit or add a new post
     """
-    # populate form with data
+    form = Post()
     if form.validate_on_submit():
         user = get_user()
         post = database.Post.from_form(form, user)
@@ -97,6 +103,10 @@ def change(id_val=None):
         flash("Post could not be saved. Check for validation errors.")
         for error in form.errors:
             flash("%s: %s" % (error, form.errors[error]))
+    if id_val:
+        post = g.db.get_post_by_id(id_val)
+        if post:
+            form = Post(id_val=id_val, title=post.title, content=post.content, published=bool(post.published))
     return render_template("forms.jinja.html", form=form)
 
 @app.route('/login', methods=["GET", "POST"])

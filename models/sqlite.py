@@ -88,8 +88,9 @@ class DataBase(DataBase):
         data = (post.name, post.title, post.content, datetime.utcnow(), post.published, post.user.username)
         if post.id_val:
             #update
-            """UPDATE posts SET (?, ?, ?, ?, ?, ?, ?) WHERE rowid = ?"""
-            self.cursor.execute(REQUEST, data + (post.id_val))
+            REQUEST = """UPDATE posts SET name=?, title=?, content=?, updated=?, published=?, user=? WHERE (rowid = ?);"""
+            data += tuple(post.id_val,)
+            self.cursor.execute(REQUEST, data)
         else:
             #new
             REQUEST = """INSERT INTO posts VALUES (?, ?, ?, ?, ?, ?)"""

@@ -7,6 +7,8 @@ ADMIN_USERNAME = "admin"
 PER_PAGE=15
 PERMANENT_LOGON_TIMEOUT = {'days': 365}
 
+PARSER="markdown"
+
 #Database
 DATABASE_TYPE="sqlite"
 CONNECTION="blog.db"
