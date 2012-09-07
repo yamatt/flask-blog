@@ -27,6 +27,16 @@ def set_parser(s):
     parser_name = ".".join(["parsers", settings.PARSER])
     parser = __import__(parser_name, globals(), locals(), [])
     return parser(s)
+    
+@app.context_processor
+def sidebar():
+    sidebar = g.db.get_sidebar()
+    return dict(sidebar=sidebar)
+    
+@app.context_processor
+def add_user():
+    user = get_user()
+    return dict(user=user)
 
 def get_user():
     username = session.get('username')
