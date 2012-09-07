@@ -16,11 +16,38 @@ create_database()
 app = Flask(__name__)
 app.config.from_object(settings)
 
-@app.template_filter('datetime')
+@app.template_filter('formatdatetime')
 def format_datetime_filter(dt, format="%Y-%m-%d %H:%M %Z"):
     timezone = load_timezone(app.config['TIME_LOCALE'])
     dt = timezone(dt)
     return dt.strftime(format)
+
+@app.template_filter('agedatetime')
+def format_datetime_filter(dt, default="just now"):
+    """
+    Returns string representing "time since" e.g.
+    3 days ago, 5 hours ago etc.
+    """
+
+    now = datetime.utcnow()
+    diff = now - dt
+    
+    periods = (
+        (diff.days / 365, "year", "years"),
+        (diff.days / 30, "month", "months"),
+        (diff.days / 7, "week", "weeks"),
+        (diff.days, "day", "days"),
+        (diff.seconds / 3600, "hour", "hours"),
+        (diff.seconds / 60, "minute", "minutes"),
+        (diff.seconds, "second", "seconds"),
+    )
+
+    for period, singular, plural in periods:
+        
+        if period:
+            return "%d %s ago" % (period, singular if period == 1 else plural)
+
+    return default
     
 @app.template_filter("parse")
 def set_parser(s):
