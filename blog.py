@@ -13,12 +13,6 @@ def create_database():
     database = getattr(database_module, settings.DATABASE_TYPE)
 create_database()
 
-def set_parser():
-    global parser
-    parser_name = ".".join(["parsers", settings.PARSER])
-    parser = __import__(parser_name, globals(), locals(), [])
-#set_parser()
-
 app = Flask(__name__)
 app.config.from_object(settings)
 
@@ -27,6 +21,12 @@ def format_datetime_filter(dt, format="%Y-%m-%d %H:%M %Z"):
     timezone = load_timezone(app.config['TIME_LOCALE'])
     dt = timezone(dt)
     return dt.strftime(format)
+    
+@app.template_filter("parse")
+def set_parser(s):
+    parser_name = ".".join(["parsers", settings.PARSER])
+    parser = __import__(parser_name, globals(), locals(), [])
+    return parser(s)
 
 def get_user():
     username = session.get('username')
