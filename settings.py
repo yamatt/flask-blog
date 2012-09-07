@@ -6,7 +6,7 @@ SECRET_KEY = """CHANGE ME!!!"""
 ADMIN_USERNAME = "admin"
 PER_PAGE=15
 PERMANENT_LOGON_TIMEOUT = {'days': 365}
-
+TIME_LOCALE="Europe/London"
 PARSER="markdown"
 
 #Database

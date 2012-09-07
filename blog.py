@@ -4,6 +4,7 @@ from enums import AuthorisationLevels
 from models.forms import Login, Post
 from datetime import timedelta
 from functools import wraps
+from pytz import timezone as load_timezone
 
 def create_database():
     global database
@@ -22,7 +23,9 @@ app = Flask(__name__)
 app.config.from_object(settings)
 
 @app.template_filter('datetime')
-def format_datetime_filter(dt, format="%Y-%m-%d %H:%M UTC"):
+def format_datetime_filter(dt, format="%Y-%m-%d %H:%M %Z"):
+    timezone = load_timezone(app.config['TIME_LOCALE'])
+    dt = timezone(dt)
     return dt.strftime(format)
 
 def get_user():
