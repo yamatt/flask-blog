@@ -1,3 +1,5 @@
 $(document).ready(function() {
-    // do stuff when DOM is ready
+    $('.notification').click(function (e) {
+        $(this).fadeOut();
+    });
 });

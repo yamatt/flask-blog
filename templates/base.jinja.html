@@ -15,6 +15,15 @@
     <body>
         <a href="#content" class="accessability">Skip to content</a>
         <a href="#navigation" class="accessability">Skip to navigation</a>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="notifications">
+        {% for message in messages %}
+            <li class="notification">{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
         <div class="bar gradient-small">
             <a href="/" class="inline outline" title="Go home"><img src="/static/img/logo.png" alt="@mattcopp" title="Logo" /></a>
             <ul class="inline-list top" id="navigation">
@@ -37,9 +46,7 @@
                 </div>
             </div>
             <div class="column span-24 center small">
-                {% for message in get_flashed_messages() %}
-                    <p>{{ message }}</p>
-                {% endfor %}
+                footer
             </div>
         </div>
     </body>

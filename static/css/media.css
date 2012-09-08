@@ -196,4 +196,25 @@ h4 {
   background-position: bottom;
 }
 
+.notifications {
+  z-index: 1000;
+  position: fixed;
+  top: 1em;
+  right: 1em;
+}
+
+.notification {
+  display: block;
+  padding: 1em;
+  background-color: RGBA(0,0,0,0.8);
+  color: #fff;
+  font-weight: bold;
+  width: 15em;
+  box-shadow: 0 0 1em #000;
+  border-radius: 1em;
+  margin: 1em 0;
+  cursor:pointer;
+  cursor:hand;
+}
+
 }

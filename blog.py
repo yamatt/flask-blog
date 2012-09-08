@@ -19,7 +19,7 @@ app.config.from_object(settings)
 @app.template_filter('formatdatetime')
 def format_datetime_filter(dt, format="%Y-%m-%d %H:%M %Z"):
     timezone = load_timezone(app.config['TIME_LOCALE'])
-    dt = timezone(dt)
+    dt = timezone.fromutc(dt)
     return dt.strftime(format)
 
 @app.template_filter('agedatetime')
@@ -52,13 +52,14 @@ def format_datetime_filter(dt, default="just now"):
 @app.template_filter("parse")
 def set_parser(s):
     parser_name = ".".join(["parsers", settings.PARSER])
-    parser = __import__(parser_name, globals(), locals(), [])
+    parser_module = __import__(parser_name, globals(), locals(), [settings.PARSER])
+    parser = getattr(parser_module, "parser")
     return parser(s)
     
-@app.context_processor
-def sidebar():
-    sidebar = g.db.get_sidebar()
-    return dict(sidebar=sidebar)
+#@app.context_processor
+#def sidebar():
+    #sidebar = g.db.get_sidebar()
+    #return dict(sidebar=sidebar)
     
 @app.context_processor
 def add_user():
@@ -179,7 +180,7 @@ def login():
 def logout():
     if session.get("username"):
         session.pop("username")
-        flash("""You have been logged out.""")
+        flash("You have been logged out.")
     else:
         flash("You are not logged in.")
     return redirect(url_for("posts"))
