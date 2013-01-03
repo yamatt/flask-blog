@@ -27,3 +27,9 @@ class Post(Form):
 class Comment(Form):
     submit_name = "Submit"
     content = TextAreaField("Content", [validators.Required()])
+
+class Page(Form):
+    submit_name = "Save"
+    title = TextField("Title", [validators.Required()])
+    content = TextAreaField("Content", [validators.Required()])
+    published = BooleanField("Publish?", default=False)

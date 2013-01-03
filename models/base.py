@@ -65,6 +65,7 @@ class DataBase(object):
         Takes a fully formatted Post object and stores it in the
         database.
         :param post:a Post object to save.
+        Returns completed post object (with id)
         """
         raise NotImplementedError()
 
@@ -81,6 +82,30 @@ class DataBase(object):
         Takes a User object and stores it in the database.
         It will have to check it's unique constraints.
         :param user:User object to store.
+        """
+        raise NotImplementedError()
+        
+    def get_page(self, name):
+        """
+        Takes the page name and returns a Page object populated from the
+        database entry.
+        :param name:used to uniquely identify the page.
+        """
+        raise NotImplementedError()
+        
+    def add_page(self, name):
+        """
+        Takes a page name and returns a Page object populated from the
+        database entry.
+        :param name:used to uniquely identify the page.
+        """
+        raise NotImplementedError()
+        
+    def get_all_pages(self):
+        """
+        A catch-all used to return every page in the database. Usually
+        used to find non-published pages.
+        Returns an iterable full of Page objects.
         """
         raise NotImplementedError()
         
@@ -110,15 +135,34 @@ class Comment(Item):
         self.post = post
         super(Comment, self).__init__(content, user, created)
         
-class Page(Item):        
+class Page(Item):
+    """
+    Represents a blog entry.
+    
+    It is recommended you extend this object through inheritance so that
+    you can more easily manipulate your database.
+    """
+    @classmethod
+    def from_form(cls, form, user):
+        """
+        Accepts the WTForms Form object and a User object to turn in to
+        a Post.
+        """
+        title = form.title.data
+        name = title.replace(" ", "-").lower()
+        content = form.content.data
+        user = user
+        published = form.published.data
+        updated = datetime.utcnow()
+        return cls(name, title, content, user, updated, published)
+            
     def __init__(self, name, title, content, user, updated, published=False):
         self.name = name
+        self.title = title
         self.published = None
-        if published:
-            self.published = datetime.utcnow()
         super(Page, self).__init__(content, user, updated)
     
-class Post(Page):
+class Post(Item):
     """
     Represents a blog entry.
     
@@ -133,17 +177,34 @@ class Post(Page):
         """
         id_val = form.id_val.data
         title = form.title.data
+        name = title.replace(" ", "-").lower()
         content = form.content.data
         user = user
         published = form.published.data
         updated = datetime.utcnow()
-        return cls(id_val, title, content, user, updated, published)
+        return cls(id_val, name, title, content, user, updated, published)
         
-    def __init__(self, id_val, title, content, user, updated=None, published=False):
+    def __init__(self, id_val, name, title, content, user, updated=None, published=False):
         self.id_val = id_val
+        self.name = name
         self.title = title
-        name = title.replace(" ", "-")
-        super(Post, self).__init__(name, title, content, user, updated, published)
+        self.published = published
+        if published:
+            self.published = datetime.utcnow()
+        super(Post, self).__init__(content, user, updated)
+        
+	def to_form(self):
+		return self.__dict__
+		
+	def __dict__(self):
+		return {
+			"id_val": self.id_val,
+			"title": self.title,
+			"content": self.content,
+			"user": self.user,
+			"published": self.published,
+			"updated": self.updated
+		}
         
         
 class User(object):

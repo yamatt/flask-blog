@@ -1,9 +1,11 @@
 {% extends "base.jinja.html" %}
 {% block contents %}
     {% if posts|length %}
+        <ul>
         {% for post in posts %}
-            {% include "item.jinja.html" %}
+            <li><a href="/posts/{{ post.id_val }}/edit">{{ post.name }}</a></li>
         {% endfor %}
+        </ul>
     {% else %}
         <p>No posts found.</p>
     {% endif %}
