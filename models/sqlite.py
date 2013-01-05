@@ -123,7 +123,6 @@ class DataBase(DataBase):
             #update
             REQUEST = """UPDATE pages SET name=?, title=?, content=?, updated=?, published=?, user=?  WHERE (name = ?);"""
             data += (page.name,)
-            print "####", data
             self.cursor.execute(REQUEST, data)
         else:
             #new
