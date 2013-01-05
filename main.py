@@ -69,7 +69,7 @@ def setup_database():
 	g.database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
 
 app.register_blueprint(frontpage)
-app.register_blueprint(pages, url_prefix="/pages")
+app.register_blueprint(pages)
 app.register_blueprint(posts, url_prefix="/posts")
 app.register_blueprint(accounts, url_prefix="/accounts")
     
