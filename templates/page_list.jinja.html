@@ -1,0 +1,12 @@
+{% extends "base.jinja.html" %}
+{% block contents %}
+    {% if pages|length %}
+        <ul>
+        {% for page in pages %}
+            <li><a href="{{ url_for("pages.show", name=page.name) }}">{{ page.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No pages found.</p>
+    {% endif %}
+{% endblock %}

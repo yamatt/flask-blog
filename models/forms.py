@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, TextAreaField, HiddenField, PasswordField, BooleanField, validators
+from flask.ext.wtf import Form, TextField, TextAreaField, HiddenField, PasswordField, BooleanField, SubmitField, validators
 
 class User(Form):
     username = TextField("Username", [validators.Length(min=4, max=25)])
@@ -33,3 +33,7 @@ class Page(Form):
     title = TextField("Title", [validators.Required()])
     content = TextAreaField("Content", [validators.Required()])
     published = BooleanField("Publish?", default=False)
+
+class Confirm(Form):
+    yes = SubmitField("Yes")
+    no = SubmitField("No")

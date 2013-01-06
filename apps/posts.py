@@ -10,10 +10,12 @@ def archive(year=None, month=None):
     posts = g.database.engine.get_published_posts(year, month)
     return render_template("posts.jinja.html", posts=posts)
     
-@posts.route("/<int:year>/<int:month>/<string:title>")
-def show(year, month, title):
-    post = g.database.engine.get_published_post(year, month, title)
-    return render_template("posts.jinja.html", post=[post])
+@posts.route("/<int:year>/<int:month>/<string:name>")
+def show(year, month, name):
+    post = g.database.engine.get_published_post(year, month, name)
+    if post:
+        return render_template("post.jinja.html", item=post)
+    abort(404)
     
 @posts.route("/new", methods=["GET", "POST"])
 @is_admin

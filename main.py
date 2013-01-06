@@ -34,7 +34,6 @@ def format_datetime_filter(dt, default="just now"):
 
     now = datetime.utcnow()
     diff = now - dt
-    
     periods = (
         (diff.days / 365, "year", "years"),
         (diff.days / 30, "month", "months"),
@@ -66,7 +65,7 @@ def add_user():
 
 @app.before_request
 def setup_database():
-	g.database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
+    g.database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
 
 app.register_blueprint(frontpage)
 app.register_blueprint(pages)

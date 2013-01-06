@@ -1,3 +1,3 @@
-<h2>{{ post.title }}</h2>
-<p>by {{ post.user.fullname }} on {{ post.published | formatdatetime }}</p>
-{{ post.content | parse | safe }}
+<h2><a href="{{ url_for("posts.show", year=item.published.year, month=item.published.month, name=item.name) }}">{{ item.title }}</a></h2>
+<p>by {{ item.user.fullname }} on <span title="{{ item.published | formatdatetime }}">{{ item.published | agedatetime }}</span></p>
+{{ item.content | parse | safe }}

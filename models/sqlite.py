@@ -114,7 +114,7 @@ class DataBase(DataBase):
         REQUEST = """SELECT rowid, name, title, content, updated, published, user FROM pages WHERE (name=?)"""
         result = self.cursor.execute(REQUEST, (name,)).fetchone()
         if result:
-			return Page.from_result(self, result)
+            return Page.from_result(self, result)
         
     def add_page(self, page):
         data = page.to_row()
@@ -137,6 +137,11 @@ class DataBase(DataBase):
             page = Page(*row)
             results.append(page)
         return results
+        
+    def delete_page(self, name):
+        REQUEST = """DELETE FROM pages WHERE name=?"""
+        self.cursor.execute(REQUEST, (name,))
+        self._save()
         
     def _save(self):
         self.conn.commit()

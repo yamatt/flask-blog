@@ -156,10 +156,11 @@ class Page(Item):
         updated = datetime.utcnow()
         return cls(name, title, content, user, updated, published)
             
-    def __init__(self, name, title, content, user, updated, published=False):
+    def __init__(self, name, title, content, user, updated=None, published=False):
         self.name = name
         self.title = title
-        self.published = None
+        if published:
+            self.published = datetime.utcnow()
         super(Page, self).__init__(content, user, updated)
     
 class Post(Item):
@@ -192,20 +193,6 @@ class Post(Item):
         if published:
             self.published = datetime.utcnow()
         super(Post, self).__init__(content, user, updated)
-        
-	def to_form(self):
-		return self.__dict__
-		
-	def __dict__(self):
-		return {
-			"id_val": self.id_val,
-			"title": self.title,
-			"content": self.content,
-			"user": self.user,
-			"published": self.published,
-			"updated": self.updated
-		}
-        
         
 class User(object):
     """
