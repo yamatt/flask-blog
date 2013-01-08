@@ -26,13 +26,17 @@ class Post(Form):
     
 class Comment(Form):
     submit_name = "Submit"
-    content = TextAreaField("Content", [validators.Required()])
+    content = TextAreaField("Content", [validators.Required()], description="What you want to convey.")
 
-class Page(Form):
+class Page(Comment):
+    name = TextField("Name", [validators.Required()], description="The path the page  will be accessable from.")
+    published = BooleanField("Publish?", default=False, description="Tick to make this post publically accessible.")
+    
+class Post(Comment):
     submit_name = "Save"
-    title = TextField("Title", [validators.Required()])
-    content = TextAreaField("Content", [validators.Required()])
-    published = BooleanField("Publish?", default=False)
+    id_val = HiddenField("id_val")
+    title = TextField("Title", [validators.Required()], description="The heading of the blog post.")
+    published = BooleanField("Publish?", default=False, description="Tick to make this post publically accessible.")
 
 class Confirm(Form):
     yes = SubmitField("Yes")

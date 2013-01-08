@@ -114,7 +114,7 @@ class Item(object):
     """
     A base blog post. Could turn in to a comment, blog entry or podcast episode just by extending it.
     """
-    def __init__(self, content, user, updated=None):
+    def __init__(self, content, user, updated, published):
         """
         :param content:the content of your entry.
         :param user:the user object this item was created by.
@@ -123,17 +123,18 @@ class Item(object):
         self.content = content
         self.user = user
         self.updated = updated
+        self.published = published
         
 class Comment(Item):
     """
     A comment object that holds comments for an item.
     """
-    def __init__(self, content, user, post, updated=None):
+    def __init__(self, content, user, post, updated, published):
         """
         :param post:a post object that this comment is the child of.
         """
         self.post = post
-        super(Comment, self).__init__(content, user, created)
+        super(Comment, self).__init__(content, user, updated, published)
         
 class Page(Item):
     """
@@ -148,22 +149,20 @@ class Page(Item):
         Accepts the WTForms Form object and a User object to turn in to
         a Post.
         """
-        title = form.title.data
-        name = title.replace(" ", "-").lower()
+        name = form.name.data
         content = form.content.data
-        user = user
-        published = form.published.data
+        published = datetime.utcnow() if form.published.data else None
         updated = datetime.utcnow()
-        return cls(name, title, content, user, updated, published)
+        return cls(name, content, user, updated, published)
             
-    def __init__(self, name, title, content, user, updated=None, published=False):
+    def __init__(self, name, content, user, updated, published):
+        """
+        :param name:the URL safe identifier of the page.
+        """
         self.name = name
-        self.title = title
-        if published:
-            self.published = datetime.utcnow()
-        super(Page, self).__init__(content, user, updated)
+        super(Page, self).__init__(content, user, updated, published)
     
-class Post(Item):
+class Post(Page):
     """
     Represents a blog entry.
     
@@ -178,21 +177,21 @@ class Post(Item):
         """
         id_val = form.id_val.data
         title = form.title.data
-        name = title.replace(" ", "-").lower()
+        name = title.replace(" ", "-")
         content = form.content.data
-        user = user
-        published = form.published.data
+        published = datetime.utcnow() if form.published.data else None
         updated = datetime.utcnow()
         return cls(id_val, name, title, content, user, updated, published)
         
-    def __init__(self, id_val, name, title, content, user, updated=None, published=False):
+    def __init__(self, id_val, name, title, content, user, updated, published):
+        """
+        Same as page but uses an `id_val` (any value) to identify the post when
+        it is not published.
+        """
         self.id_val = id_val
         self.name = name
         self.title = title
-        self.published = published
-        if published:
-            self.published = datetime.utcnow()
-        super(Post, self).__init__(content, user, updated)
+        super(Post, self).__init__(name, content, user, updated, published)
         
 class User(object):
     """

@@ -67,6 +67,8 @@ def add_user():
 def setup_database():
     g.database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
 
+app.url_map.strict_slashes = False
+
 app.register_blueprint(frontpage)
 app.register_blueprint(pages)
 app.register_blueprint(posts, url_prefix="/posts")
