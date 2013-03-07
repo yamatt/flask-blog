@@ -23,11 +23,11 @@ To run the app do:
 And follow the directions to access the site from your browser.
 
 # Tips
-1. Going to /accounts/login will allow the admin to login.
-1. Going to /new will allow you to create a new page. Pages are not posts. Pages are like the about page. If you create an about page the content will be displayed in the sidebar.
-1. Going to posts/new will allow you to create a new post.
-1. /list and /posts/list will give you a list of pages and posts that have been created (even ones that weren't published).
-1. A lot of configuration is stored in the settings.py file.
+1. Going to `/accounts/login` will allow the admin account that was created to login.
+1. Going to `/new` will allow you to create a new page. Pages are not posts. Pages are like the about page. If you create an about page the content will be displayed in the sidebar.
+1. Going to `/posts/new` will allow you to create a new post.
+1. `/list` and `/posts/list` will give you a list of pages and posts that have been created (even ones that weren't published).
+1. A lot of configuration is stored in the `settings.py` file.
 
 # Still to do
 * Upload app
