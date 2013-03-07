@@ -23,8 +23,8 @@ def logon():
 	
 @accounts.route("/logout")
 def logout():
-	if session['user']:
-		session['user'] = None
+	if session.get("user"):
+		del session['user']
 		flash("You have been logged out.")
 	else:
 		flash("You were not logged in.")
