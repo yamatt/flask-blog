@@ -217,4 +217,9 @@ h4 {
   cursor:hand;
 }
 
+.endsection {
+  border-bottom: 1px #999 solid;
 }
+
+}
+

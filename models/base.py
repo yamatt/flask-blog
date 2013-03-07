@@ -177,7 +177,7 @@ class Post(Page):
         """
         id_val = form.id_val.data
         title = form.title.data
-        name = title.replace(" ", "-")
+        name = title.replace(" ", "-").lower()
         content = form.content.data
         published = datetime.utcnow() if form.published.data else None
         updated = datetime.utcnow()

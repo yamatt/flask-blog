@@ -26,7 +26,7 @@ class DataBase(DataBase):
         REQUEST = """SELECT rowid, name, title, content, user, updated, published FROM posts"""
         results = []
         for row in self.cursor.execute(REQUEST):
-            post = Post(*row)
+            post = Post.from_result(self, row)
             results.append(post)
         return results
 

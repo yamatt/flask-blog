@@ -31,7 +31,7 @@ from enums import AuthorisationLevels
 
 database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
 
-def create_admin(username, password, full_name="", e_mail=""):
+def create_admin(username, password, full_name="Administrator", e_mail=""):
     hashed_password = database.models.User.hash_password(password)
     user = database.models.User(username, full_name, e_mail, hashed_password, AuthorisationLevels.ADMIN)
     database.engine.add_user(user)
@@ -41,7 +41,7 @@ def user_exists(username):
     return bool(user)
 
 if __name__ == '__main__':
-    if len(sys.argv) < 1:
+    if len(sys.argv) == 1:
         print "You must specify a username as the first argument."
         exit(1)
     else:

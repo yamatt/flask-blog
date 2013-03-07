@@ -4,6 +4,13 @@ from decorators import is_admin
 
 posts = Blueprint("posts", __name__)
 
+
+@posts.route("/list")
+@is_admin
+def list():
+    posts = g.database.engine.get_all_posts()
+    return render_template("post_list.jinja.html", posts=posts)
+
 @posts.route("/<int:year>")
 @posts.route("/<int:year>/<int:month>")
 def archive(year=None, month=None):
@@ -38,6 +45,15 @@ def edit(identifier):
         g.database.engine.add_post(edited_post)
         flash("Saved.")
     return render_template("forms.jinja.html", form=form)
+    
+@posts.route("/<int:year>/<int:month>/<string:name>/edit")
+@is_admin
+def edit_redirect(year, month, name):
+    post = g.database.engine.get_published_post(year, month, name)
+    if post:
+        return redirect(url_for(".edit", identifier=post.id_val))
+    abort(404)
+
 
 
 @posts.route("/id/<identifier>/delete", methods=["GET", "POST"])

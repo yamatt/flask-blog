@@ -3,7 +3,7 @@
     {% if pages|length %}
         <ul>
         {% for page in pages %}
-            <li><a href="{{ url_for("pages.show", name=page.name) }}">{{ page.title }}</a></li>
+            <li><a href="{{ url_for("pages.show", name=page.name) }}">{{ page.name }}</a></li>
         {% endfor %}
         </ul>
     {% else %}

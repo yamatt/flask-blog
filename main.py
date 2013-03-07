@@ -59,6 +59,18 @@ def set_parser(s):
     return parser(s)
     
 @app.context_processor
+def get_page():
+    def get_page(name):
+        page = g.database.engine.get_page(name)
+        return page
+    return {"get_page": get_page}
+    
+@app.context_processor
+def latest_posts():
+    posts = g.database.engine.get_published_posts()
+    return {"latest_posts": posts}
+    
+@app.context_processor
 def add_user():
     user = session.get('user')
     return {"user": user}
