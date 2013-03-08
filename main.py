@@ -11,6 +11,7 @@ from apps.posts import posts
 from apps.accounts import accounts
 from apps.frontpage import frontpage
 from apps.pages import pages
+from apps.upload import upload
 
 # common
 from datetime import timedelta, datetime
@@ -85,6 +86,7 @@ app.register_blueprint(frontpage)
 app.register_blueprint(pages)
 app.register_blueprint(posts, url_prefix="/posts")
 app.register_blueprint(accounts, url_prefix="/accounts")
+app.register_blueprint(upload, url_prefix="/upload")
     
 if __name__ == "__main__":
     app.run()

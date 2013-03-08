@@ -1,4 +1,7 @@
-from flask.ext.wtf import Form, TextField, TextAreaField, HiddenField, PasswordField, BooleanField, SubmitField, validators
+from flask.ext.wtf import Form, TextField, TextAreaField, HiddenField, PasswordField, BooleanField, SubmitField, validators, FileField
+
+class Form(Form):
+    mimetype=""
 
 class User(Form):
     username = TextField("Username", [validators.Length(min=4, max=25)])
@@ -41,3 +44,10 @@ class Post(Comment):
 class Confirm(Form):
     yes = SubmitField("Yes")
     no = SubmitField("No")
+    
+class Upload(Form):
+    submit_name = "Upload"
+    mimetype="multipart/form-data"
+    upload = FileField(u'File', description=u"The file you wish to upload.")
+    filename = TextField(u"New filename:", description="If you wish to rename this file type it here otherwise leave it blank.")
+    

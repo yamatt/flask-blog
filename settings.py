@@ -12,6 +12,9 @@ PERMANENT_SESSION_LIFETIME = timedelta(days=365)
 TIME_LOCALE="Europe/London"
 PARSER="Markdown"
 
+UPLOAD_FOLDER="uploads"
+ALLOWED_EXTENSIONS=set([".zip", ".tar.gz", ".png", ".jpg"])
+
 #Database
 DATABASE_ENGINE="sqlite"
 DATABASE_CONNECTION_STRING="blog.db"
