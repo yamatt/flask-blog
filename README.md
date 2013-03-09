@@ -16,7 +16,9 @@ The easiest way to get started is to first create a database with an administrat
 
 Where matt is the username. It can be your own name if you prefer.
 
-To run the app do:
+*Open up the `settings.py` file and change the `SECRET_KEY` to be anything non-guessable.*
+
+Run the app do:
 
     ./main.py
 
