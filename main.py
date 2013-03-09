@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # flask
-from flask import Flask, g, session
+from flask import Flask, g, session, url_for
 
 # config
 import settings
@@ -61,9 +61,10 @@ def set_parser(s):
     
 @app.context_processor
 def get_page():
-    def get_page(name):
+    def get_page(name, published=True):
         page = g.database.engine.get_page(name)
-        return page
+        if page and published and page.published:
+            return page
     return {"get_page": get_page}
     
 @app.context_processor
