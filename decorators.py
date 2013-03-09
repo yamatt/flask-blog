@@ -5,7 +5,7 @@ from enums import AuthorisationLevels
 def is_admin(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = session['user']
+        user = session.get('user')
         if user:
             if user.authorisation_level >= AuthorisationLevels.ADMIN:
                 return f(*args, **kwargs)
