@@ -16,7 +16,7 @@ The easiest way to get started is to first create a database with an administrat
 
 Where matt is the username. It can be your own name if you prefer.
 
-*Open up the `settings.py` file and change the `SECRET_KEY` to be anything non-guessable.*
+**Open up the `settings.py` file and change the `SECRET_KEY` to be anything non-guessable.**
 
 Run the app do:
 
@@ -32,7 +32,7 @@ And follow the directions to access the site from your browser.
 1. A lot of configuration is stored in the `settings.py` file.
 
 # Still to do
-* Upload app
+* ~~Upload app~~
 * Commenting
 * User registration
 * User editing
