@@ -3,10 +3,10 @@
     {% if pages|length %}
         <ul>
         {% for page in pages %}
-            <li><a href=""></a></li>
+            <li><a href="{{ url_for("pages.show", name=page.name) }}">{{ page.name }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
-        <p>No posts found.</p>
+        <p>No pages found.</p>
     {% endif %}
 {% endblock %}

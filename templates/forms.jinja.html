@@ -1,6 +1,6 @@
 {% extends "base.jinja.html" %}
 {% block contents %}
-<form method="POST" action="{{ post_location }}">
+<form method="POST" action="{{ post_location }}" enctype="{{ form.mimetype }}">
 {% for field in form -%}
     {% if field.type == "HiddenField" or field.name == "csrf_token" %}
     {{ field }}

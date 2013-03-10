@@ -1,0 +1,12 @@
+{% extends "base.jinja.html" %}
+{% block contents %}
+    {% if posts|length %}
+        <ul>
+        {% for post in posts %}
+            <li><a href="{{ url_for("posts.show", year=post.published.year, month=post.published.month, name=post.name) }}">{{ post.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No posts found.</p>
+    {% endif %}
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends "base.jinja.html" %}
 {% block contents %}
     {% if posts|length %}
-        {% for post in posts %}
+        {% for item in posts %}
             {% include "item.jinja.html" %}
         {% endfor %}
     {% else %}

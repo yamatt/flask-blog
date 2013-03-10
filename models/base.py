@@ -65,6 +65,7 @@ class DataBase(object):
         Takes a fully formatted Post object and stores it in the
         database.
         :param post:a Post object to save.
+        Returns completed post object (with id)
         """
         raise NotImplementedError()
 
@@ -84,12 +85,36 @@ class DataBase(object):
         """
         raise NotImplementedError()
         
+    def get_page(self, name):
+        """
+        Takes the page name and returns a Page object populated from the
+        database entry.
+        :param name:used to uniquely identify the page.
+        """
+        raise NotImplementedError()
+        
+    def add_page(self, name):
+        """
+        Takes a page name and returns a Page object populated from the
+        database entry.
+        :param name:used to uniquely identify the page.
+        """
+        raise NotImplementedError()
+        
+    def get_all_pages(self):
+        """
+        A catch-all used to return every page in the database. Usually
+        used to find non-published pages.
+        Returns an iterable full of Page objects.
+        """
+        raise NotImplementedError()
+        
         
 class Item(object):
     """
     A base blog post. Could turn in to a comment, blog entry or podcast episode just by extending it.
     """
-    def __init__(self, content, user, updated=None):
+    def __init__(self, content, user, updated, published):
         """
         :param content:the content of your entry.
         :param user:the user object this item was created by.
@@ -98,25 +123,44 @@ class Item(object):
         self.content = content
         self.user = user
         self.updated = updated
+        self.published = published
         
 class Comment(Item):
     """
     A comment object that holds comments for an item.
     """
-    def __init__(self, content, user, post, updated=None):
+    def __init__(self, content, user, post, updated, published):
         """
         :param post:a post object that this comment is the child of.
         """
         self.post = post
-        super(Comment, self).__init__(content, user, created)
+        super(Comment, self).__init__(content, user, updated, published)
         
-class Page(Item):        
-    def __init__(self, name, title, content, user, updated, published=False):
+class Page(Item):
+    """
+    Represents a blog entry.
+    
+    It is recommended you extend this object through inheritance so that
+    you can more easily manipulate your database.
+    """
+    @classmethod
+    def from_form(cls, form, user):
+        """
+        Accepts the WTForms Form object and a User object to turn in to
+        a Post.
+        """
+        name = form.name.data
+        content = form.content.data
+        published = datetime.utcnow() if form.published.data else None
+        updated = datetime.utcnow()
+        return cls(name, content, user, updated, published)
+            
+    def __init__(self, name, content, user, updated, published):
+        """
+        :param name:the URL safe identifier of the page.
+        """
         self.name = name
-        self.published = None
-        if published:
-            self.published = datetime.utcnow()
-        super(Page, self).__init__(content, user, updated)
+        super(Page, self).__init__(content, user, updated, published)
     
 class Post(Page):
     """
@@ -133,18 +177,21 @@ class Post(Page):
         """
         id_val = form.id_val.data
         title = form.title.data
+        name = title.replace(" ", "-").lower()
         content = form.content.data
-        user = user
-        published = form.published.data
+        published = datetime.utcnow() if form.published.data else None
         updated = datetime.utcnow()
-        return cls(id_val, title, content, user, updated, published)
+        return cls(id_val, name, title, content, user, updated, published)
         
-    def __init__(self, id_val, title, content, user, updated=None, published=False):
+    def __init__(self, id_val, name, title, content, user, updated, published):
+        """
+        Same as page but uses an `id_val` (any value) to identify the post when
+        it is not published.
+        """
         self.id_val = id_val
+        self.name = name
         self.title = title
-        name = title.replace(" ", "-")
-        super(Post, self).__init__(name, title, content, user, updated, published)
-        
+        super(Post, self).__init__(name, content, user, updated, published)
         
 class User(object):
     """

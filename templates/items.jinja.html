@@ -1,9 +1,9 @@
 {% extends "base.jinja.html" %}
 {% block contents %}
-    {% if pages|length %}
+    {% if posts|length %}
         <ul>
-        {% for page in pages %}
-            <li><a href=""></a></li>
+        {% for post in posts %}
+            <li><a href="{{ url_for("pages.show", name=page.name) }}">{{ page.title }}</a></li>
         {% endfor %}
         </ul>
     {% else %}

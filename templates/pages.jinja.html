@@ -1,12 +1,10 @@
 {% extends "base.jinja.html" %}
 {% block contents %}
     {% if pages|length %}
-        <ul>
-        {% for page in pages %}
-            <li><a href=""></a></li>
+        {% for item in pages %}
+            {% include "item.jinja.html" %}
         {% endfor %}
-        </ul>
     {% else %}
-        <p>No posts found.</p>
+        <p>No pages found.</p>
     {% endif %}
 {% endblock %}

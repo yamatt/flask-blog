@@ -1,6 +1,26 @@
-                    <h3>Latest Stuff...</h3>
-                    <ul>
-                        <li><a href="#">Article 1</a></li>
-                        <li><a href="#">Article 2</a></li>
-                        <li><a href="#">Article 3</a></li>
+                    {% if get_page("about") %}
+                    <section>
+                        <h3>About</h3>
+                        {{ get_page("about").content | parse | safe }}
+                    </section>
+                    {% endif %}
+                    <section>
+                        <h3>Welcome {{ user.name -}}</h3>
+                        {% if get_page("navigation") %}
+                            {{ get_page("navigation").content | parse | safe }}
+                        {% endif %}
+                    </section>
+                    <section>
+                    <h3>Latest Posts</h3>
+                    <ul class="ordered">
+                        {% for post in latest_posts %}
+                            <li><a href="{{ url_for("posts.show", year=post.published.year, month=post.published.month, name=post.name) }}">{{ post.title }}</a></li>
+                        {% endfor %}
                     </ul>
+                    </section>
+                    {% if get_page("extras") %}
+                    <section>
+                        <h3>More Info</h3>
+                        {{ get_page("extras").content | parse | safe }}
+                    </section>
+                    {% endif %}
