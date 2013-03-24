@@ -1,7 +1,7 @@
                     {% if get_page("about") %}
                     <section>
                         <h3>About</h3>
-                        {{ get_page("about").content | parse | safe }}
+                        {{ get_page("aboutsidebar").content | parse | safe }}
                     </section>
                     {% endif %}
                     <section>
