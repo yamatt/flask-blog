@@ -48,11 +48,11 @@
             <div class="column span-24 center small">
                 &nbsp;
             </div>
-        </div>
-        <div id="footer" class="small-text column span-24 last">
-            {% if get_page("footer") %}
-                {{ get_page("footer").content | parse | safe }}
-            {% endif %}
+            <div id="footer" class="small center column span-24 last">
+                {% if get_page("footer") %}
+                    {{ get_page("footer").content | parse | safe }}
+                {% endif %}
+            </div>
         </div>
     </body>
 </html>
