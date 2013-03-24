@@ -10,13 +10,14 @@ This is a blog I built to run in Python using the Flask micro-web framework.
 * python-bcrypt (for password hashes)
 
 # Setup
+Copy the `settings.py.defaults` file to `settings.py` and open it to set your preferences.
+**OChange the `SECRET_KEY` to be anything non-guessable.**
+
 The easiest way to get started is to first create a database with an administrator account. Run `create_admin.py` to setup the database like so:
 
     ./create_admin.py matt
 
 Where matt is the username. It can be your own name if you prefer.
-
-**Open up the `settings.py` file and change the `SECRET_KEY` to be anything non-guessable.**
 
 Run the app do:
 
