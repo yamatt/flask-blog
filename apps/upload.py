@@ -27,7 +27,6 @@ def upload_file():
     return render_template("forms.jinja.html", form=form)
     
 @upload.route("/file/<filename>")
-@is_admin
 def get_file(filename):
     return send_from_directory(current_app.config['UPLOAD_FOLDER'],
         filename)
