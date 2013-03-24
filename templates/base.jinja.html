@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>@mattcopp-blog</title>
-        <link rel="icon" type="image/png" href="/static/img/favicon.png">
-        <link rel="stylesheet" href="/static/css/blueprint/reset.css" type="text/css" media="screen, projection" />
-        <link rel="stylesheet" href="/static/css/blueprint-plugin---liquidgrid/liquid.css" type="text/css" media="screen, projection" />
+        <link rel="icon" type="image/png" href="static/img/favicon.png">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/blueprint/reset.css') }}" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/blueprint-plugin---liquidgrid/liquid.css') }}" type="text/css" media="screen, projection" />
         <!--[if lt IE 8]>
-            <link rel="stylesheet" href="static/css/blueprint/ie.css" type="text/css" media="screen, projection"/>
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/blueprint/ie.css') }}" type="text/css" media="screen, projection"/>
         <![endif]-->
-        <link rel="stylesheet" href="/static/css/media.css" />
-        <script type="text/javascript" src="/static/js/jquery.min.js"></script>
-        <script type="text/javascript" src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/media.css') }}" />
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     </head>
     <body>
         <a href="#content" class="accessability">Skip to content</a>
@@ -25,11 +25,11 @@
     {% endif %}
 {% endwith %}
         <div class="bar gradient-small">
-            <a href="/" class="inline outline" title="Go home"><img src="/static/img/logo.png" alt="@mattcopp" title="Logo" /></a>
+            <a href="/" class="inline outline" title="Go home"><img src="static/img/logo.png" alt="@mattcopp" title="Logo" /></a>
             <ul class="inline-list top" id="navigation">
-                <li class="menu-item"><a class="color1" href="/about"><div>About</div></a></li>
-                <li class="menu-item"><a class="color1" href="/projects"><div>Projects</div></a></li>
-                <li class="menu-item"><a class="color1" href="/contact"><div>Contact</div></a></li>
+                <li class="menu-item"><a class="color1" href="about"><div>About</div></a></li>
+                <li class="menu-item"><a class="color1" href="projects"><div>Projects</div></a></li>
+                <li class="menu-item"><a class="color1" href="contact"><div>Contact</div></a></li>
             </ul>
         </div>
         <div class="container">
