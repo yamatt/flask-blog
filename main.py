@@ -88,6 +88,15 @@ app.register_blueprint(pages)
 app.register_blueprint(posts, url_prefix="/posts")
 app.register_blueprint(accounts, url_prefix="/accounts")
 app.register_blueprint(upload, url_prefix="/upload")
+
+if not app.debug:
+    import logging
+    from logging import FileHandler
+    file_handler = FileHandler(app.config['LOG_FILE'])
+    file_handler.setLevel(logging.WARNING)
+    app.logger.addHandler(file_handler)
+    
+
     
 if __name__ == "__main__":
     app.run()

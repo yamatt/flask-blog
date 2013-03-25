@@ -19,3 +19,6 @@ ALLOWED_EXTENSIONS=set([".zip", ".tar.gz", ".png", ".jpg"])
 DATABASE_ENGINE="sqlite"
 DATABASE_CONNECTION_STRING="blog.db"
 
+#Logging
+LOG_FILE="blog.log"
+
