@@ -41,3 +41,4 @@ And follow the directions to access the site from your browser.
 * Mobile themes
 * Redo login part to use Flask-Login
 * Tests
+* Page titles
