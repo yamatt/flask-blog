@@ -3,7 +3,7 @@
     {% if posts|length %}
         <ul>
         {% for post in posts %}
-            <li><a href="{{ url_for("posts.show", year=post.published.year, month=post.published.month, name=post.name) }}">{{ post.title }}</a></li>
+            <li><a href="{{ url_for("posts.show_from_id", identifier=post.id_val) }}">{{ post.title }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
