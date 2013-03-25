@@ -34,6 +34,14 @@ def new():
         flash("Saved.")
         return redirect(url_for(".edit", identifier=saved_post.id_val))
     return render_template("forms.jinja.html", form=form)
+    
+@posts.route("/id/<identifier>")
+@is_admin
+def show_from_id(identifier):
+    post = g.database.engine.get_post_by_id(identifier)
+    if post:
+        return render_template("post.jinja.html", item=post)
+    abort(404)
 
 @posts.route("/id/<identifier>/edit", methods=["GET", "POST"])
 @is_admin
