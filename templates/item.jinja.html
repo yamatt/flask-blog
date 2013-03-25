@@ -1,4 +1,4 @@
-{% item.published %}
+{% if item.published %}
     <h2><a href="{{ url_for("posts.show", year=item.published.year, month=item.published.month, name=item.name) }}">{{ item.title }}</a></h2>
 {% else %}
     <h2><a href="{{ url_for("posts.show_from_id", identifier=post.id_val) }}">{{ item.title }}</a></h2>
