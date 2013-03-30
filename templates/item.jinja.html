@@ -1,7 +1,8 @@
 {% if item.published %}
     <h2><a href="{{ url_for("posts.show", year=item.published.year, month=item.published.month, name=item.name) }}">{{ item.title }}</a></h2>
+    <p>by {{ item.user.fullname }} <span title="{{ item.published | formatdatetime }}">{{ item.published | agedatetime }}</span></p>
 {% else %}
-    <h2><a href="{{ url_for("posts.show_from_id", identifier=post.id_val) }}">{{ item.title }}</a></h2>
+    <h2><a href="{{ url_for("posts.show_from_id", identifier=item.id_val) }}">{{ item.title }}</a></h2>
+    <p>by {{ item.user.fullname }} unpublished</span></p>
 {% endif %}
-<p>by {{ item.user.fullname }} on <span title="{{ item.published | formatdatetime }}">{{ item.published | agedatetime }}</span></p>
 {{ item.content | parse | safe }}
