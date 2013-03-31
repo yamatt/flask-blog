@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>@mattcopp-blog</title>
+        {% if not page_name %}
+            <title>@mattcopp-blog</title>
+        {% else %}
+            <title>{{ page_name }} - @mattcopp-blog</title>
+        {% endif %}
         <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/blueprint/reset.css') }}" type="text/css" media="screen, projection" />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/blueprint-plugin---liquidgrid/liquid.css') }}" type="text/css" media="screen, projection" />
@@ -25,7 +29,7 @@
     {% endif %}
 {% endwith %}
         <div class="bar gradient-small">
-            <a href="{{ url_for('frontpage.show') }}" class="inline outline" title="Go home"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="@mattcopp" title="Logo" /></a>
+            <h1><a href="{{ url_for('frontpage.show') }}" class="inline outline" title="Go home"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="@mattcopp" title="Logo" /></a></h1>
             <ul class="inline-list top" id="navigation">
                 <li class="menu-item"><a class="color1" href="{{ url_for('pages.show', name="about") }}"><div>About</div></a></li>
                 <li class="menu-item"><a class="color1" href="{{ url_for('pages.show', name="projects") }}"><div>Projects</div></a></li>

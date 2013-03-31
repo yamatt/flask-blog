@@ -21,7 +21,7 @@ def archive(year=None, month=None):
 def show(year, month, name):
     post = g.database.engine.get_published_post(year, month, name)
     if post:
-        return render_template("post.jinja.html", item=post)
+        return render_template("post.jinja.html", item=post, page_name=post.title)
     abort(404)
     
 @posts.route("/new", methods=["GET", "POST"])
@@ -40,7 +40,7 @@ def new():
 def show_from_id(identifier):
     post = g.database.engine.get_post_by_id(identifier)
     if post:
-        return render_template("post.jinja.html", item=post)
+        return render_template("post.jinja.html", item=post, page_name=post.name)
     abort(404)
 
 @posts.route("/id/<identifier>/edit", methods=["GET", "POST"])
