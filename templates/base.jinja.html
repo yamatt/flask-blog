@@ -17,8 +17,8 @@
         <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     </head>
     <body>
-        <a href="#content" class="accessability">Skip to content</a>
-        <a href="#navigation" class="accessability">Skip to navigation</a>
+        <a href="#content" class="accessibility accessibility-hidden">Skip to content</a>
+        <a href="#navigation" class="accessibility accessibility-hidden">Skip to navigation</a>
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         <ul class="notifications">

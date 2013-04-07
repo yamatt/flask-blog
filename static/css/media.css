@@ -4,7 +4,7 @@
     left: -2500px;
   }
 }
-@media all and (min-width: 900px) {
+@media screen and (min-width: 900px) {
     body {
       font-size: 80%;
       background: #eee;
@@ -49,7 +49,7 @@
       font-weight: bold;
     }
 
-    .accessability {
+    .accessibility {
       font-size: 120%;
       display: block;
       position: absolute;
@@ -227,3 +227,16 @@
     }
 }
 
+@media screen and (max-width: 900px) {
+    body {
+      background: #eee;
+      font-family: sans-serif;
+    }
+    .bar {
+        background-color: #aaa;
+    }
+    a {
+      color: #2863a1;
+      text-decoration: none;
+    }
+}
