@@ -6,12 +6,17 @@ class DataBase(DataBase):
     SETUP_COMMANDS = [
         """CREATE TABLE IF NOT EXISTS posts (name TEXT, title TEXT, content TEXT, updated INTEGER, published INTEGER, user TEXT)""",
         """CREATE TABLE IF NOT EXISTS users (username TEXT, fullname TEXT, email TEXT, hashed_password BLOB, authorisation_level INTEGER, PRIMARY KEY(username))""",
-        """CREATE TABLE IF NOT EXISTS pages (name TEXT, content TEXT, updated INTEGER, published INTEGER, user TEXT)""",
+        """CREATE TABLE IF NOT EXISTS pages (name TEXT, title TEXT, content TEXT, updated INTEGER, published INTEGER, user TEXT)""",
     ]
 
     def __init__(self, connection_string):
         self.conn = sqlite3.connect(connection_string)
         self.cursor = self.conn.cursor()
+        for command in self.SETUP_COMMANDS:
+            self.cursor.execute(command)
+        self.conn.commit()
+        
+    def create(self):
         for command in self.SETUP_COMMANDS:
             self.cursor.execute(command)
         self.conn.commit()
@@ -117,7 +122,7 @@ class DataBase(DataBase):
         self._save()
         
     def get_page(self, name):
-        REQUEST = """SELECT rowid, name, content, updated, published, user FROM pages WHERE (name=?)"""
+        REQUEST = """SELECT rowid, name, title, content, updated, published, user FROM pages WHERE (name=?)"""
         result = self.cursor.execute(REQUEST, (name,)).fetchone()
         if result:
             return Page.from_result(self, result)
@@ -129,18 +134,18 @@ class DataBase(DataBase):
             if page.published and current_page.published:
                 page.published = current_page.published
             data = page.to_row()
-            REQUEST = """UPDATE pages SET name=?, content=?, updated=?, published=?, user=?  WHERE (name = ?);"""
+            REQUEST = """UPDATE pages SET name=?, title=?, content=?, updated=?, published=?, user=?  WHERE (name = ?);"""
             data += (page.name,)
             self.cursor.execute(REQUEST, data)
         else:
             #new
             data = page.to_row()
-            REQUEST = """INSERT INTO pages VALUES (?, ?, ?, ?, ?)"""
+            REQUEST = """INSERT INTO pages VALUES (?, ?, ?, ?, ?, ?)"""
             self.cursor.execute(REQUEST, data)
         self._save()
         
     def get_all_pages(self):
-        REQUEST = """SELECT name, content, user, updated, published FROM pages"""
+        REQUEST = """SELECT name, title, content, user, updated, published FROM pages"""
         results = []
         for row in self.cursor.execute(REQUEST):
             page = Page(*row)
@@ -185,13 +190,14 @@ class Page(Page):
     @classmethod
     def from_result(cls, database, result):
         name = result[1]
-        content = result[2]
-        updated = datetime.fromtimestamp(result[3])
-        published = result[4]
-        user = database.get_user(result[5])
+        title = result[2]
+        content = result[3]
+        updated = datetime.fromtimestamp(result[4])
+        published = result[5]
+        user = database.get_user(result[6])
         if published:
             published = datetime.fromtimestamp(published)
-        return cls(name, content, user, updated, published)
+        return cls(name, title, content, user, updated, published)
         
     def to_row(self):
         updated = int(datetime.utcnow().strftime("%s"))
@@ -199,4 +205,4 @@ class Page(Page):
             published = int(self.published.strftime("%s"))
         else:
             published = self.published
-        return (self.name, self.content, updated, published, self.user.username)
+        return (self.name, self.title, self.content, updated, published, self.user.username)

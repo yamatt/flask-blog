@@ -150,16 +150,18 @@ class Page(Item):
         a Post.
         """
         name = form.name.data
+        title = form.title.data
         content = form.content.data
         published = datetime.utcnow() if form.published.data else None
         updated = datetime.utcnow()
-        return cls(name, content, user, updated, published)
+        return cls(name, title, content, user, updated, published)
             
-    def __init__(self, name, content, user, updated, published):
+    def __init__(self, name, title, content, user, updated, published):
         """
         :param name:the URL safe identifier of the page.
         """
         self.name = name
+        self.title = title
         super(Page, self).__init__(content, user, updated, published)
     
 class Post(Page):

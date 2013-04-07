@@ -33,6 +33,7 @@ class Comment(Form):
 
 class Page(Comment):
     name = TextField("Name", [validators.Required()], description="The path the page  will be accessable from.")
+    title = TextField("Title", [validators.Required()], description="The heading of the page.")
     published = BooleanField("Publish?", default=False, description="Tick to make this post publically accessible.")
     
 class Post(Comment):
