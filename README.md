@@ -11,15 +11,15 @@ This is a blog I built to run in Python using the Flask micro-web framework.
 
 # Setup
 Copy the `settings.py.defaults` file to `settings.py` and open it to set your preferences.
-**OChange the `SECRET_KEY` to be anything non-guessable.**
+**Change the `SECRET_KEY` to be anything non-guessable.**
 
-The easiest way to get started is to first create a database with an administrator account. Run `create_admin.py` to setup the database like so:
+The easiest way to get started is to first create a database with an administrator account. Run `create_db.py` to setup the database like so:
 
-    ./create_admin.py matt
+    ./create_db.py Administrator
 
-Where matt is the username. It can be your own name if you prefer.
+Where matt is the username for the administrative account you want to known by. It can be your own name if you prefer. You will then be asked to set up a password for this account.
 
-Run the app do:
+To run the blog do:
 
     ./main.py
 
