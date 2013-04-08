@@ -19,11 +19,13 @@ The easiest way to get started is to first create a database with an administrat
 
 Where matt is the username for the administrative account you want to known by. It can be your own name if you prefer. You will then be asked to set up a password for this account.
 
-To run the blog do:
+To run the blog as a demonstration do:
 
     ./main.py
 
 And follow the directions to access the site from your browser.
+
+**However** if you want to run the blog on a public website please follow instructions on setting it up with a proper HTTP server such as Apace or Nginx and uWSGI.
 
 # Tips
 1. Going to `/accounts/login` will allow the admin account that was created to login.
