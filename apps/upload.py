@@ -24,7 +24,7 @@ def upload_file():
                 flash("File '{0}' could not be saved. Filename already exists.".format(filename), "error")
         else:
             flash("File could not be found or extension not allowed.")
-    return render_template("forms.jinja.html", form=form)
+    return render_template("forms.jinja.html", form=form, page_name="Upload file", content_name="Select file to upload.")
     
 @upload.route("/file/<filename>")
 def get_file(filename):

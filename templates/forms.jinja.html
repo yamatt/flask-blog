@@ -1,5 +1,14 @@
 {% extends "base.jinja.html" %}
 {% block contents %}
+{% if content_name %}
+    {% if not content_name_hidden %}
+        <h2>{{ content_name }}</h2>
+    {% else %}
+        <h2 class="accessibility-hidden">{{ content_name }}</h2>
+    {% endif %}
+{% else %}
+    <h2 class="accessibility-hidden">{{ page_name }}</h2>
+{% endif %}
 <form method="POST" action="{{ post_location }}" enctype="{{ form.mimetype }}">
 {% for field in form -%}
     {% if field.type == "HiddenField" or field.name == "csrf_token" %}

@@ -8,14 +8,14 @@ pages = Blueprint("pages", __name__)
 def show(name):
     page = g.database.engine.get_page(name)
     if page and page.published:
-        return render_template("page.jinja.html", page=page)
+        return render_template("page.jinja.html", page=page, page_name=page.title)
     abort(404)
 
 @pages.route("/list")
 @is_admin
 def list():
     pages = g.database.engine.get_all_pages()
-    return render_template("page_list.jinja.html", pages=pages)
+    return render_template("page_list.jinja.html", pages=pages, page_name="List of all pages.")
     
 @pages.route("/new", methods=["GET", "POST"])
 @is_admin
@@ -26,7 +26,7 @@ def new():
         g.database.engine.add_page(new_page)
         flash("Saved.")
         return redirect(url_for(".edit", name=new_page.name))
-    return render_template("forms.jinja.html", form=form)
+    return render_template("forms.jinja.html", form=form, page_name="Create new page")
 
 @pages.route("/<path:name>/edit", methods=["GET", "POST"])
 @is_admin
@@ -38,7 +38,7 @@ def edit(name):
             edited_page = g.database.models.Page.from_form(form, session['user'])
             g.database.engine.add_page(edited_page)
             flash("Saved.")
-        return render_template("forms.jinja.html", form=form)
+        return render_template("forms.jinja.html", form=form, page_name="Editing page '{0}'".format(page.title))
     abort(404)
 
 @pages.route("/<path:name>/delete", methods=["GET", "POST"])
