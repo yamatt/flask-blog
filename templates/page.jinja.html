@@ -1,5 +1,4 @@
 {% extends "base.jinja.html" %}
 {% block contents %}
-    <h2>{{ page.title }}</h2>
     {{ page.content | parse | safe }}
 {% endblock %}

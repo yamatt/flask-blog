@@ -19,7 +19,7 @@ def logon():
                 flash("Username or password incorrect.")
     else:
         flash("You are already logged in.")
-    return render_template("login.jinja.html", form=account)
+    return render_template("login.jinja.html", form=account, page_name="Login", content_name="Please Login")
     
 @accounts.route("/logout")
 def logout():
