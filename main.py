@@ -20,6 +20,8 @@ from pytz import timezone as load_timezone
 app = Flask(__name__)
 app.config.from_object(settings)
 
+database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
+
 @app.template_filter('formatdatetime')
 def format_datetime_filter(dt, format="%Y-%m-%d %H:%M %Z"):
     timezone = load_timezone(app.config['TIME_LOCALE'])
@@ -79,7 +81,7 @@ def add_user():
 
 @app.before_request
 def setup_database():
-    g.database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
+    g.database = database
 
 app.url_map.strict_slashes = False
 
