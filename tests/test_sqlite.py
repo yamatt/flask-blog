@@ -3,6 +3,12 @@ from os import remove
 from models import sqlite
 from uuid import uuid4 as uuid
 import sqlite3
+from datetime import datetime
+from mockito import *
+
+MockUser = mock()
+MockUser.username = "test_user"
+
 
 class TestSQLiteDB(unittest.TestCase):
     TEST_DB = "test.db"
@@ -33,6 +39,17 @@ class TestSQLiteDB(unittest.TestCase):
         
         user = self.blog_db.get_user(values[0])
         self.assertEqual(user.to_row(), values)
+        
+    def test_posts(self):
+        post_1 = sqlite.Post(None, "name1", "title1", "content1", MockUser, datetime.now(), datetime.now())
+        post_2 = sqlite.Post(None, "name2", "title2", "content2", MockUser, datetime.now(), datetime.now())
+        
+        self.blog_db.add_post(post_1)
+        self.blog_db.add_post(post_2)
+        
+        published_posts = self.blog_db.get_published_posts()
+        
+        self.assertEqual(len(published_posts), 2, "Failed. Found: {0}".format(published_posts))
         
 
 if __name__ == "__main__":
