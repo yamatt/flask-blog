@@ -82,7 +82,7 @@ class DataBase(DataBase):
                 results.append(post)
         else:
             # get all
-            for row in self.cursor.execute(REQUEST):
+            for row in self.cursor.execute(REQUEST).fetchall():
                 post = Post.from_result(self, row)
                 results.append(post)
             
