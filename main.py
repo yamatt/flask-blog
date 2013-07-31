@@ -76,12 +76,12 @@ def latest_posts():
     
 @app.context_processor
 def add_user():
-    user = session.get('user')
+    user = g.database.engine.get_user(session.get('user'))
     return {"user": user}
 
 @app.before_request
 def setup_database():
-    g.database = database
+    g.database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
 
 app.url_map.strict_slashes = False
 

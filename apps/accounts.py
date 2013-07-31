@@ -13,7 +13,7 @@ def logon():
             sleep(1) # delay the login process to slow brute force
             user = g.database.engine.get_user(account.data['username'])
             if user and user.password_matches(account.data['password']):
-                session['user'] = user
+                session['user'] = user.username
                 flash("Logged in successfully.")
             else:
                 flash("Username or password incorrect.")

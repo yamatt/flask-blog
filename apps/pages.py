@@ -22,7 +22,8 @@ def list():
 def new():
     form = Page()
     if form.validate_on_submit():
-        new_page = g.database.models.Page.from_form(form, session['user'])
+        user = g.database.engine.get_user(session['user'])
+        new_page = g.database.models.Page.from_form(form, user)
         g.database.engine.add_page(new_page)
         flash("Saved.")
         return redirect(url_for(".edit", name=new_page.name))
@@ -35,7 +36,8 @@ def edit(name):
     if page:
         form = Page(obj=page)
         if form.validate_on_submit():
-            edited_page = g.database.models.Page.from_form(form, session['user'])
+            user = g.database.engine.get_user(session['user'])
+            edited_page = g.database.models.Page.from_form(form, user)
             g.database.engine.add_page(edited_page)
             flash("Saved.")
         return render_template("forms.jinja.html", form=form, page_name="Editing page '{0}'".format(page.title))
