@@ -29,7 +29,8 @@ def show(year, month, name):
 def new():
     form = Post()
     if form.validate_on_submit():
-        new_post = g.database.models.Post.from_form(form, session['user'])
+        user = g.database.engine.get_user(session['user'])
+        new_post = g.database.models.Post.from_form(form, user)
         saved_post = g.database.engine.add_post(new_post)
         flash("Saved.")
         return redirect(url_for(".edit", identifier=saved_post.id_val))
@@ -49,7 +50,8 @@ def edit(identifier):
     post = g.database.engine.get_post_by_id(identifier)
     form = Post(obj=post)
     if form.validate_on_submit():
-        edited_post = g.database.models.Post.from_form(form, session['user'])
+        user = g.database.engine.get_user(session['user'])
+        edited_post = g.database.models.Post.from_form(form, user)
         g.database.engine.add_post(edited_post)
         flash("Saved.")
     return render_template("forms.jinja.html", form=form, page_name="Editing post '{0}'".format(post.title))

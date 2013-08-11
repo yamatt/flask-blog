@@ -193,7 +193,7 @@ class Post(Page):
         self.id_val = id_val
         self.name = name
         self.title = title
-        super(Post, self).__init__(name, content, user, updated, published)
+        super(Post, self).__init__(name, title, content, user, updated, published)
         
 class User(object):
     """
