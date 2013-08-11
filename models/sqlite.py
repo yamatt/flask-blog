@@ -52,8 +52,8 @@ class DataBase(DataBase):
             return Post.from_result(self, result)
     
     def get_published_posts(self, year=None, month=None, page=None):
-        REQUEST_DATE = """SELECT rowid, name, title, content, user, updated, published FROM posts WHERE (published > ? AND published < ?)"""
-        REQUEST = """SELECT rowid, name, title, content, user, updated, published FROM posts WHERE (published > 0)"""
+        REQUEST_DATE = """SELECT rowid, name, title, content, user, updated, published FROM posts WHERE (published > ? AND published < ?) ORDER BY published DESC"""
+        REQUEST = """SELECT rowid, name, title, content, user, updated, published FROM posts WHERE (published > 0) ORDER BY published DESC"""
         
         def datetime_to_epoc(dt):
             return int(dt.strftime("%s"))
