@@ -18,7 +18,8 @@ setup(
     long_description=read('README.md'),
     install_requires=[
         "flask>=0.8",
-        "flask-WTF>=0.10"
+        "flask-WTF>=0.10",
+        "flask-script>=2.0"
     ],
     classifiers=[
     ],
