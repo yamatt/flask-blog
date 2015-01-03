@@ -3,3 +3,4 @@
 *.ignore
 *.db
 settings.py
+env/*
