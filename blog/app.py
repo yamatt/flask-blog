@@ -7,11 +7,7 @@ from config import defaults
 from models.interface import DatabaseInterface
 
 # blueprints
-from blueprints.posts import posts
-from blueprints.accounts import accounts
-from blueprints.frontpage import frontpage
-from blueprints.pages import pages
-from blueprints.upload import upload
+import blueprints
 
 # common
 from datetime import timedelta, datetime
@@ -86,11 +82,7 @@ def setup_database():
 
 app.url_map.strict_slashes = False
 
-app.register_blueprint(frontpage)
-app.register_blueprint(pages)
-app.register_blueprint(posts, url_prefix="/posts")
-app.register_blueprint(accounts, url_prefix="/accounts")
-app.register_blueprint(upload, url_prefix="/upload")
+blueprints.loader(app)
 
 if not app.debug:
     import logging
