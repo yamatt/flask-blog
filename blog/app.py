@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.config.from_object(defaults)
 app.config.from_envvar('PYTHON_FLASK_BLOG_CONFIG', silent=True)
 
-database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
+database = DatabaseInterface(app.config['DATABASE_ENGINE'], app.config['DATABASE_CONNECTION_STRING'])
 
 @app.template_filter('formatdatetime')
 def format_datetime_filter(dt, format="%Y-%m-%d %H:%M %Z"):
@@ -78,7 +78,7 @@ def add_user():
 
 @app.before_request
 def setup_database():
-    g.database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
+    g.database = DatabaseInterface(app.config['DATABASE_ENGINE'], app.config['DATABASE_CONNECTION_STRING'])
 
 app.url_map.strict_slashes = False
 
