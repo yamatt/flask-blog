@@ -15,7 +15,7 @@ from pytz import timezone as load_timezone
 
 app = Flask(__name__)
 app.config.from_object(defaults)
-app.config.from_envvar('PYTHON_FLASK_BLOG_CONFIG')
+app.config.from_envvar('PYTHON_FLASK_BLOG_CONFIG', silent=True)
 
 database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
 
