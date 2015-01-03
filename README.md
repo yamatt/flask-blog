@@ -2,12 +2,13 @@
 This is a blog I built to run in Python using the Flask micro-web framework.
 
 # Requirements
-* Python >=2.6
-* python-flask >=0.8 (maybe 0.7 too)
-* python-wtforms
-* flask-WTF (from PyPI)
-* python-sqlite (if you're using sqlite)
-* python-bcrypt (for password hashes)
+* Python >=2.6 (not yet tested for Python 3)
+* python-flask >=0.8
+* Flask-WTF
+
+# Optional Packages
+* python-sqlite - if you want to use the sqlite for your database
+* python-bcrypt - if you want to use the standard login module
 
 # Setup
 Copy the `settings.py.defaults` file to `settings.py` and open it to set your preferences.

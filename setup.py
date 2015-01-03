@@ -16,6 +16,10 @@ setup(
     license = "BSD",
     packages=['blog', 'tests'],
     long_description=read('README.md'),
+    install_requires=[
+        "flask>=0.8",
+        "flask-WTF>=0.10"
+    ],
     classifiers=[
     ],
 )
