@@ -3,7 +3,7 @@
 from flask import Flask, g, session, url_for
 
 # config
-import settings
+from config import defaults
 from models.interface import DatabaseInterface
 
 # blueprints
@@ -18,7 +18,8 @@ from datetime import timedelta, datetime
 from pytz import timezone as load_timezone
 
 app = Flask(__name__)
-app.config.from_object(settings)
+app.config.from_object(defaults)
+app.config.from_envvar('PYTHON_FLASK_BLOG_CONFIG')
 
 database = DatabaseInterface(settings.DATABASE_ENGINE, settings.DATABASE_CONNECTION_STRING)
 
