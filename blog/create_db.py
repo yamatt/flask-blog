@@ -3,7 +3,6 @@
 #
 #  create_admin.py
 #  
-#  Copyright 2013 Matthew Copperwaite <copperwaitem@01wubuntu01>
 #  Flask Blog is a blogging app for Flask
 #  Copyright (C) 2014  Matt Copperwaite <matt@copperwaite.net>
 #
