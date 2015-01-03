@@ -6,12 +6,12 @@ from flask import Flask, g, session, url_for
 import settings
 from models.interface import DatabaseInterface
 
-# apps
-from apps.posts import posts
-from apps.accounts import accounts
-from apps.frontpage import frontpage
-from apps.pages import pages
-from apps.upload import upload
+# blueprints
+from blueprints.posts import posts
+from blueprints.accounts import accounts
+from blueprints.frontpage import frontpage
+from blueprints.pages import pages
+from blueprints.upload import upload
 
 # common
 from datetime import timedelta, datetime
