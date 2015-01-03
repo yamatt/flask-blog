@@ -1,1 +1,5 @@
+*.pyc
+*~
+*.ignore
+*.db
 settings.py
