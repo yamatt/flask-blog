@@ -11,22 +11,13 @@ This is a blog I built to run in Python using the Flask micro-web framework.
 * python-bcrypt - if you want to use the standard login module
 
 # Setup
-Copy the `settings.py.defaults` file to `settings.py` and open it to set your preferences.
 **Change the `SECRET_KEY` to be anything non-guessable.**
 
 The easiest way to get started is to first create a database with an administrator account. Run `create_db.py` to setup the database like so:
 
     ./create_db.py Administrator
 
-Where matt is the username for the administrative account you want to known by. It can be your own name if you prefer. You will then be asked to set up a password for this account.
-
-To run the blog as a demonstration do:
-
-    ./main.py
-
-And follow the directions to access the site from your browser.
-
-**However** if you want to run the blog on a public website please follow instructions on setting it up with a proper HTTP server such as Apace or Nginx and uWSGI.
+Where `Administrator` is the username for the administrative account you want to known by. It can be your own name if you prefer. You will then be asked to set up a password for this account.
 
 # Tips
 1. Going to `/accounts/login` will allow the admin account that was created to login.
