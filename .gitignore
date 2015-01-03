@@ -6,4 +6,4 @@ settings.py
 env/*
 build/*
 dist/*
-*.egg/*
+*.egg-info/*
