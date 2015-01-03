@@ -19,7 +19,8 @@ setup(
     install_requires=[
         "flask>=0.8",
         "flask-WTF>=0.10",
-        "flask-script>=2.0"
+        "flask-script>=2.0",
+        "pytz>=2014"
     ],
     classifiers=[
     ],
