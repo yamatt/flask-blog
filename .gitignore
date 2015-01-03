@@ -4,3 +4,6 @@
 *.db
 settings.py
 env/*
+build/*
+dist/*
+*.egg/*
